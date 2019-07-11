@@ -5,5 +5,6 @@
   "main": "index.js",
   "repository": "https://github.com/zenwork/bubblesub.git",
   "author": "florian@hehlen.name",
-  "license": "MIT"
+  "license": "MIT",
+
 }
