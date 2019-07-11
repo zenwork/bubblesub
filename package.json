@@ -1,0 +1,9 @@
+{
+  "name": "bubblesub",
+  "version": "1.0.0",
+  "description": "dependnecy injection using DOM events",
+  "main": "index.js",
+  "repository": "https://github.com/zenwork/bubblesub.git",
+  "author": "florian@hehlen.name",
+  "license": "MIT"
+}
