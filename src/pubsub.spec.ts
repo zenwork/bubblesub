@@ -1,6 +1,5 @@
-/*
 import { customElement, LitElement, property } from 'lit-element';
-import mix from 'mix-with';
+import { mix } from 'mix-with';
 import { Publication, PublisherMixin } from './PublisherMixin';
 import { SubscriberMixin } from './SubscriberMixin';
 
@@ -49,4 +48,3 @@ class TestSubscriber extends mix(LitElement).with(SubscriberMixin) {
     this.subscribe<string>('test', updated => this.injected = updated);
   }
 }
-*/

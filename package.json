@@ -48,7 +48,9 @@
         "webpack": "4.28.3",
         "webpack-cli": "3.2.0",
         "webpack-deep-scope-plugin": "1.6.0",
-        "webpack-dev-server": "3.2.1"
+        "webpack-dev-server": "3.2.1",
+        "mix-with": "^3.0.1",
+        "lit-element": "^2.2.0"
     },
     "dependencies": {
         "dts-generator": "^3.0.0"

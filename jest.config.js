@@ -5,7 +5,7 @@ module.exports = {
   modulePaths: ['<rootDir>/src/main', '<rootDir>src/test/unit'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/', '<rootDir>/webpack/'],
   coverageDirectory: 'report/coverage',
-  testRegex: 'src/test/unit/.*\\.spec\\.ts$',
+  testRegex: 'src/.*\\.spec\\.ts$',
   moduleFileExtensions: [
     'ts',
     'tsx',
