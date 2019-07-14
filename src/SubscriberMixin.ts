@@ -1,3 +1,4 @@
+import { Constructor } from 'mix-with';
 import { Publication } from './PublisherMixin';
 
 export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest';
@@ -7,7 +8,7 @@ export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest';
  * @param superclass
  * @constructor
  */
-export const SubscriberMixin = (superclass: any) => class extends superclass {
+export const SubscriberMixin = (superclass: Constructor) => class extends superclass {
 
   /**
    * Subscribe for changes to a subscribable. The update is called once on subscription to get the initial value.
@@ -29,6 +30,7 @@ export const SubscriberMixin = (superclass: any) => class extends superclass {
       });
 
     // request the publication
+    // @ts-ignore
     this.dispatchEvent(event);
 
     // subscribe for updates

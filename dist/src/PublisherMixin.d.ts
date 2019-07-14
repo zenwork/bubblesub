@@ -1,12 +1,12 @@
+import { Constructor } from 'mix-with';
 import { Update } from './SubscriberMixin';
 /**
  * Publishing mixin
  * @param superclass class to mixin with
  * @constructor
  */
-export declare const PublisherMixin: (superclass: any) => {
-    new (): {
-        [x: string]: any;
+export declare const PublisherMixin: (superclass: Constructor<{}>) => {
+    new (...args: any[]): {
         /**
          * Expose a Subscibable over events
          * @param name
@@ -14,7 +14,6 @@ export declare const PublisherMixin: (superclass: any) => {
          */
         publish<T>(name: string, initialValue: T): Publication<T>;
     };
-    [x: string]: any;
 };
 /**
  * A published value

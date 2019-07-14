@@ -1,3 +1,4 @@
+import { Constructor } from 'mix-with';
 import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './SubscriberMixin';
 
 /**
@@ -5,7 +6,7 @@ import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './Subscriber
  * @param superclass class to mixin with
  * @constructor
  */
-export const PublisherMixin = (superclass: any) => class extends superclass {
+export const PublisherMixin = (superclass: Constructor) => class extends superclass {
 
   /**
    * Expose a Subscibable over events
@@ -24,6 +25,7 @@ export const PublisherMixin = (superclass: any) => class extends superclass {
         event.stopPropagation();
       }
     };
+    // @ts-ignore
     this.addEventListener(PUB_REQUEST_EVENT_NAME, requestListener);
     return publication;
   }

@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "12466d9818457888d9e8";
+/******/ 	var hotCurrentHash = "fc9a2ce2fa630e0bac5a";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -914,6 +914,7 @@ const PublisherMixin = (superclass) => class extends superclass {
                 event.stopPropagation();
             }
         };
+        // @ts-ignore
         this.addEventListener(_SubscriberMixin__WEBPACK_IMPORTED_MODULE_0__["PUB_REQUEST_EVENT_NAME"], requestListener);
         return publication;
     }
@@ -971,6 +972,7 @@ const SubscriberMixin = (superclass) => class extends superclass {
             composed: true
         });
         // request the publication
+        // @ts-ignore
         this.dispatchEvent(event);
         // subscribe for updates
         publication.subscribe(update);
