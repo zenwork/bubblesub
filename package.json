@@ -7,7 +7,6 @@
     "author"          : "florian@hehlen.name",
     "license"         : "MIT",
     "scripts"         : {
-        "postinstall": "npm run build.full",
         "lint"       : "tslint --project . --config ./tslint.json",
         "build"      : "webpack --mode production",
         "build.dev"  : "webpack --mode development",
