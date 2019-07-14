@@ -1,2 +1,2 @@
-# bubblesub
-dependency injection through DOM events
+# Bubble Sub
+This 
