@@ -7,9 +7,6 @@
             "es2017",
             "scripthost"
         ],
-        "declaration"     : false,
-        "sourceMap"       : true,
-        "outDir"          : "./dist/js",
         "strict"          : true,
         "moduleResolution": "node",
         "typeRoots"       : [
@@ -17,10 +14,6 @@
         ],
         "experimentalDecorators": true,
         "downlevelIteration"    : true,
-        "esModuleInterop"       : true,
-        "allowJs": false
-    },
-    "exclude"        : [
-        "node_modules"
-    ]
+        "esModuleInterop"       : true
+    }
 }
