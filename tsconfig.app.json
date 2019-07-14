@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "declarationMap": true,
+        "declarationDir": "dist"
+    },
+    "extends": "./tsconfig",
+    "exclude": [
+        "node_modules",
+        "src/test",
+        "src/workshop"
+    ]
+}

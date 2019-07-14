@@ -1,14 +1,26 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "es6",
-        "lib": ["es2015"],
-        "strict": true,
-        "declaration": true,
-        "outDir": "dist",
-        "sourceMap": true,
-        "experimentalDecorators": true
+        "target"          : "esnext",
+        "module"          : "esnext",
+        "lib"             : [
+            "dom",
+            "es2017",
+            "scripthost"
+        ],
+        "declaration"     : false,
+        "sourceMap"       : true,
+        "outDir"          : "./dist/js",
+        "strict"          : true,
+        "moduleResolution": "node",
+        "typeRoots"       : [
+            "./node_modules/@types"
+        ],
+        "experimentalDecorators": true,
+        "downlevelIteration"    : true,
+        "esModuleInterop"       : true,
+        "allowJs": false
     },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "**/*.test.ts"]
+    "exclude"        : [
+        "node_modules"
+    ]
 }

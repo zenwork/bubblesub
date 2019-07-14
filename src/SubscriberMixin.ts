@@ -1,4 +1,4 @@
-import { Publication } from "./PublisherMixin";
+import { Publication } from './PublisherMixin';
 
 export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest';
 
@@ -10,8 +10,7 @@ export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest';
 export const SubscriberMixin = (superclass: any) => class extends superclass {
 
   /**
-   * Subscribe for changes to a subscibable. The update is called once on subscription to get the initial value.
-   * @param dispatcher element from which to make the request
+   * Subscribe for changes to a subscribable. The update is called once on subscription to get the initial value.
    * @param name pub name
    * @param update function called once each time the pub changes
    */
@@ -20,7 +19,7 @@ export const SubscriberMixin = (superclass: any) => class extends superclass {
     const publication = new PublicationRequest<T>(name);
 
     // seek a parent that provides this publication
-    let event = new CustomEvent(
+    const event = new CustomEvent(
       PUB_REQUEST_EVENT_NAME,
       {
         detail: publication,
@@ -37,7 +36,7 @@ export const SubscriberMixin = (superclass: any) => class extends superclass {
 
     console.debug('first update for: ' + publication.name);
 
-    //force publish initial value
+    // force publish initial value
     update(publication.value);
   }
 };
@@ -65,6 +64,4 @@ export class PublicationRequest<T> {
 /**
  * Publication update callback
  */
-export interface Update<T> {(updated: T | null): void;}
-
-
+export type Update<T> = (updated: T | null) => void;

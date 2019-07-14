@@ -1,4 +1,4 @@
-import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from "./SubscriberMixin";
+import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './SubscriberMixin';
 
 /**
  * Publishing mixin
@@ -13,9 +13,9 @@ export const PublisherMixin = (superclass: any) => class extends superclass {
    * @param initialValue
    */
   publish<T>(name: string, initialValue: T): Publication<T> {
-    let publication = new Publication<T>(name, initialValue);
-    let requestListener = (event: CustomEvent) => {
-      let request: PublicationRequest<T> = event.detail;
+    const publication = new Publication<T>(name, initialValue);
+    const requestListener = (event: CustomEvent) => {
+      const request: PublicationRequest<T> = event.detail;
       if (request.name === publication.name) {
         console.debug(`handling pub request for: ${publication.name}`);
         // provide publication to requestor
@@ -25,7 +25,7 @@ export const PublisherMixin = (superclass: any) => class extends superclass {
       }
     };
     this.addEventListener(PUB_REQUEST_EVENT_NAME, requestListener);
-    return publication
+    return publication;
   }
 };
 
@@ -34,7 +34,7 @@ export const PublisherMixin = (superclass: any) => class extends superclass {
  */
 export class Publication<T> {
 
-  public readonly name: string;
+  readonly name: string;
   private subscriptions = new Array<Update<T>>();
   private publishedValue: T;
 
@@ -44,15 +44,15 @@ export class Publication<T> {
   }
 
   get value(): T {
-    return this.publishedValue
+    return this.publishedValue;
   }
 
   update(value: T) {
     this.publishedValue = value;
-    this.subscriptions.forEach((value) => value(this.value))
+    this.subscriptions.forEach((v) => v(this.value));
   }
 
-  public subscribe(fn: Update<T>) {
+  subscribe(fn: Update<T>) {
     this.subscriptions.push(fn);
   }
 }

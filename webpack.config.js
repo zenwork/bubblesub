@@ -1,28 +1,21 @@
-const path = require('path');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+module.exports = (env, argv) => {
 
+  let config = require('./webpack/base.config')(env, argv, __dirname);
 
-module.exports = {
-  mode: 'development',
-  entry: './index.ts',
-  devtool: 'source-map',
-  output: {
-    filename: '[name].[hash].js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-  module: {
-    rules: [
-      {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
-      {test: /\.ts$/, exclude: /node_modules/, loader: 'babel-loader'},
-    ],
-  },
-  resolve: {extensions: ['.js', '.jsx', '.tsx', '.ts', '.json']},
-  plugins: [
-    new CleanWebpackPlugin(),
-  ],
-  devServer: {
-    contentBase: `./dist`,
-    port: 9000,
-    hot: true,
+  if (argv.workshop) {
+    return require('./webpack/workshop.config')(env, argv, __dirname, config);
   }
+
+  switch (argv.mode) {
+    case 'production':
+      config = require('./webpack/prod.config')(env, argv, __dirname, config);
+      break;
+    case 'development':
+      config = require('./webpack/prod.config')(env, argv, __dirname, config);
+      break;
+    default:
+      config = require('./webpack/prod.config')(env, argv, __dirname, config);
+      break;
+  }
+  return config;
 };
