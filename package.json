@@ -1,0 +1,21 @@
+{
+    "name": "bubblesub",
+    "version": "1.0.1",
+    "main": "index.js",
+    "repository": "https://github.com/zenwork/bubblesub.git",
+    "author": "flo <flo@noumenadigital.com>",
+    "license": "MIT",
+    "scripts": {
+        "build": "bili --format esm --format cjs --format esm-min --format cjs-min",
+        "prepublishOnly": "npm run build"
+    },
+    "devDependencies": {
+        "bili": "^4.8.0",
+        "rollup-plugin-typescript2": "^0.22.0",
+        "tslint": "^5.18.0",
+        "typescript": "^3.5.3"
+    },
+    "files": [
+        "dist"
+    ]
+}
