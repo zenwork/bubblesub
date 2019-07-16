@@ -4,13 +4,18 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = function configure(env, arg, wdir, config) {
   wdir = `${wdir}/`;
 
-  config.entry = [
-    `${wdir}index.ts`,
-  ];
+  config.entry = {
+    'bubblesub': `${wdir}index.ts`,
+    'bubblesub.min': `${wdir}index.ts`
+}
+  ;
 
   config.output = {
-    path: path.join(wdir, 'dist'),
-    filename: 'index.js',
+    path: path.resolve(__dirname, '_bundles'),
+    filename: '[name].js',
+    libraryTarget: 'umd',
+    library: 'bubblesub',
+    umdNamedDefine: true
   };
 
   config.module.rules.unshift(
