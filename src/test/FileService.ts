@@ -5,8 +5,8 @@ export interface FileService {
 }
 
 class FileServiceImpl implements FileService {
-  getName() {return 'archive.zip';}
-  getSize() {return 12003;}
+  getName() {return 'archive.zip' }
+  getSize() {return 12003 }
   download(status: (percent: number) => void) {
     for (let i = 1; i < 101; i++) {
       setTimeout(() => {
@@ -16,4 +16,4 @@ class FileServiceImpl implements FileService {
   }
 }
 
-export const service: FileService = new FileServiceImpl();
+export const service: FileService = new FileServiceImpl()

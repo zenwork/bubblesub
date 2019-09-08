@@ -1,16 +1,16 @@
-import { Publication, publisher } from "../publisher";
-import { subscriber } from "../subscriber";
-import { FileService } from "./FileService";
+import { Publication, publisher } from '../publisher'
+import { subscriber } from '../subscriber'
+import { FileService } from './FileService'
 
 export class ProgressDialog extends HTMLElement {
 
-  pub: Publication<number> = null;
-  root:ShadowRoot;
+  pub: Publication<number> = null
+  root: ShadowRoot
 
-  constructor(){
-    super();
-    this.root = this.attachShadow({mode: 'open'});
-    this.pub = publisher(this.root).createPublication("percent", 0);
+  constructor() {
+    super()
+    this.root = this.attachShadow({mode: 'open'})
+    this.pub = publisher(this.root).createPublication('percent', 0)
 
     this.root.innerHTML = `
        <h1>CHUNK DOWNLOAD</h1>
@@ -18,7 +18,7 @@ export class ProgressDialog extends HTMLElement {
       <h3 class="size">###</h3>
       <div class="counter">${this.pub.value}</div>
       <slot></slot>
-    `;
+    `
   }
 
   connectedCallback() {
@@ -27,18 +27,18 @@ export class ProgressDialog extends HTMLElement {
       'service',
       (srv: FileService) => {
 
-        //set file name and size
-        this.root.querySelector(".name").innerHTML = srv.getName();
-        this.root.querySelector(".size").innerHTML = srv.getSize() + " MB";
+        // set file name and size
+        this.root.querySelector('.name').innerHTML = srv.getName()
+        this.root.querySelector('.size').innerHTML = srv.getSize() + ' MB'
 
-        //listen to download percent updates
+        // listen to download percent updates
         srv.download(p => {
-          this.root.querySelector(".counter").innerHTML = `${p}%`;
+          this.root.querySelector('.counter').innerHTML = `${p}%`
           this.pub.updateValue(p)
-        });
+        })
 
       })
   }
 }
 
-customElements.define("progress-dialog", ProgressDialog);
+customElements.define('progress-dialog', ProgressDialog)

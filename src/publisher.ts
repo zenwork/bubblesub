@@ -1,4 +1,4 @@
-import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber';
+import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber'
 
 export function publisher(parent: HTMLElement | ShadowRoot) {
   /**
@@ -8,23 +8,23 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
    * @param parent
    */
   return {
-    createPublication: function <T>(name: string, initialValue: T): Publication<T> {
-      const publication = new Publication<T>(name, initialValue);
+    createPublication: function createPublication<T>(name: string, initialValue: T): Publication<T> {
+      const publication = new Publication<T>(name, initialValue)
 
       const requestListener = (event: CustomEvent) => {
-        const request: PublicationRequest<T> = event.detail;
+        const request: PublicationRequest<T> = event.detail
         if (request.name === publication.name) {
-          console.debug(`PROVISION: ${publication.name}`);
-          // provide publication to requestor
-          request.pub = publication;
+          console.debug(`PROVISION: ${publication.name}`)
+          // provide publication to requester
+          request.pub = publication
           // stop propagation because only one publisher exists for each publication
-          event.stopPropagation();
+          event.stopPropagation()
         }
-      };
+      }
       // @ts-ignore
-      parent.addEventListener(PUB_REQUEST_EVENT_NAME, requestListener);
-      console.debug(`SETUP PUB: ${name}`);
-      return publication;
+      parent.addEventListener(PUB_REQUEST_EVENT_NAME, requestListener)
+      console.debug(`SETUP PUB: ${name}`)
+      return publication
     }
   }
 }
@@ -34,25 +34,25 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
  */
 export class Publication<T> {
 
-  readonly name: string;
-  private subscriptions = new Array<Update<T>>();
-  private publishedValue: T;
+  readonly name: string
+  private subscriptions = new Array<Update<T>>()
+  private publishedValue: T
 
   constructor(name: string, value: T) {
-    this.name = name;
-    this.publishedValue = value;
+    this.name = name
+    this.publishedValue = value
   }
 
   get value(): T {
-    return this.publishedValue;
+    return this.publishedValue
   }
 
   updateValue(value: T) {
-    this.publishedValue = value;
-    this.subscriptions.forEach((val) => val(this.value));
+    this.publishedValue = value
+    this.subscriptions.forEach((val) => val(this.value))
   }
 
   subscribe(fn: Update<T>) {
-    this.subscriptions.push(fn);
+    this.subscriptions.push(fn)
   }
 }

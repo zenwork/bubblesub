@@ -14,7 +14,8 @@
         "build.watch"  : "preppy --watch --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example --verbose",
         "build.example": "preppy --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example",
         "build"        : "preppy --entry-lib=src/index.ts --entry-browser=src/index.ts --output=lib",
-        "prepare"      : "yarn build; yarn build.example"
+        "prepare"      : "yarn lint && yarn build && yarn build.example",
+        "lint"         : "tslint -c tslint.json 'src/**/*.ts'"
     },
     "devDependencies": {
         "@babel/core"                            : "^7.6.0",
@@ -27,9 +28,10 @@
         "corejs"                                 : "^1.0.0",
         "es-dev-server"                          : "^1.17.2",
         "preppy"                                 : "^8.3.1",
+        "tslint"                                 : "^5.19.0",
         "typescript"                             : "^3.6.2"
     },
-    "files": [
+    "files"          : [
         "example",
         "lib",
         "README.md"
