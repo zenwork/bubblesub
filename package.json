@@ -1,49 +1,37 @@
 {
-    "name": "bubblesub",
-    "version": "1.0.0",
-    "description": "dependnecy injection using DOM events",
-    "main": "index.ts",
-    "repository": "https://github.com/zenwork/bubblesub.git",
-    "author": "florian@hehlen.name",
-    "license": "MIT",
-    "scripts": {
-        "_build": "webpack --config webpack.config.js",
-        "_build-prod": "webpack --config webpack.config.js --mode production",
-        "test": "jest --coverage",
-        "type-check": "tsc --noEmit",
-        "type-check:watch": "npm run type-check -- --watch",
-        "build": "npm run build:types && npm run build:js",
-        "build:types": "tsc --emitDeclarationOnly",
-        "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"
-    },
-    "peerDependencies": {
-        "mix-with": "^3.0.1"
+    "name"           : "bubblesub",
+    "version"        : "1.0.0",
+    "description"    : "dependnecy injection using DOM events",
+    "main"           : "lib/index.cjs.js",
+    "module"         : "lib/index.esm.js",
+    "unpkg"          : "lib/index.umd.min.js",
+    "types"          : "lib/index.d.ts",
+    "repository"     : "https://github.com/zenwork/bubblesub.git",
+    "author"         : "Florian Hehlen <florian@hehlen.name>",
+    "license"        : "MIT",
+    "scripts"        : {
+        "serve"        : "es-dev-server -c es-dev-server.config.js -w",
+        "build.watch"  : "preppy --watch --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example --verbose",
+        "build.example": "preppy --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example",
+        "build"        : "preppy --entry-lib=src/index.ts --entry-browser=src/index.ts --output=lib",
+        "prepare"      : "yarn build; yarn build.example"
     },
     "devDependencies": {
-        "@babel/cli": "^7.4.4",
-        "@babel/core": "^7.4.4",
-        "@babel/plugin-proposal-async-generator-functions": "^7.2.0",
-        "@babel/plugin-proposal-class-properties": "^7.4.4",
-        "@babel/plugin-proposal-decorators": "^7.4.4",
-        "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
-        "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-        "@babel/plugin-transform-runtime": "^7.4.4",
-        "@babel/preset-env": "^7.4.4",
-        "@babel/preset-es2015": "^7.0.0-beta.53",
-        "@babel/preset-typescript": "^7.3.3",
-        "@babel/runtime": "^7.5.4",
-        "@types/jest": "^24.0.15",
-        "@types/node": "^12.6.2",
-        "babel-loader": "^8.0.6",
-        "clean-webpack-plugin": "^3.0.0",
-        "image-webpack-loader": "^5.0.0",
-        "jest": "^24.8.0",
-        "lit-element": "^2.1.0",
-        "mix-with": "^3.0.1",
-        "ts-jest": "^24.0.2",
-        "typescript": "^3.5.1",
-        "webpack": "^4.35.3",
-        "webpack-cli": "^3.3.5",
-        "webpack-dev-server": "^3.7.2"
-    }
+        "@babel/core"                            : "^7.6.0",
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "@babel/plugin-proposal-decorators"      : "^7.6.0",
+        "@babel/plugin-transform-runtime"        : "^7.6.0",
+        "@babel/preset-env"                      : "^7.6.0",
+        "@babel/preset-typescript"               : "^7.6.0",
+        "@babel/runtime"                         : "^7.6.0",
+        "corejs"                                 : "^1.0.0",
+        "es-dev-server"                          : "^1.17.2",
+        "preppy"                                 : "^8.3.1",
+        "typescript"                             : "^3.6.2"
+    },
+    "files": [
+        "example",
+        "lib",
+        "README.md"
+    ]
 }
