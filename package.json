@@ -1,20 +1,27 @@
 {
-    "name"           : "bubblesub",
-    "version"        : "1.0.0",
-    "description"    : "dependnecy injection using DOM events",
-    "main"           : "lib/index.cjs.js",
-    "module"         : "lib/index.esm.js",
-    "unpkg"          : "lib/index.umd.min.js",
-    "types"          : "lib/index.d.ts",
-    "repository"     : "https://github.com/zenwork/bubblesub.git",
-    "author"         : "Florian Hehlen <florian@hehlen.name>",
-    "license"        : "MIT",
-    "scripts"        : {
+    "name"       : "bubblesub",
+    "version"    : "0.0.1-dev.2",
+    "description": "dependnecy injection using DOM events",
+    "main"       : "lib/index.cjs.js",
+    "module"     : "lib/index.esm.js",
+    "unpkg"      : "lib/index.umd.min.js",
+    "types"      : "lib/index.d.ts",
+    "repository" : "https://github.com/zenwork/bubblesub.git",
+    "author"     : "Florian Hehlen <florian@hehlen.name>",
+    "license"    : "MIT",
+    "keywords"   : [
+        "typescript",
+        "DI",
+        "publisher",
+        "subscriber",
+        "event"
+    ],
+    "scripts"    : {
         "serve"        : "es-dev-server -c es-dev-server.config.js -w",
         "build.watch"  : "preppy --watch --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example --verbose",
         "build.example": "preppy --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example",
         "build"        : "preppy --entry-lib=src/index.ts --entry-browser=src/index.ts --output=lib",
-        "prepare"      : "yarn lint && yarn build && yarn build.example",
+        "prepare"      : "rm -rf exmple lib && yarn lint && yarn build && yarn build.example",
         "lint"         : "tslint -c tslint.json 'src/**/*.ts'"
     },
     "devDependencies": {
@@ -34,6 +41,7 @@
     "files"          : [
         "example",
         "lib",
-        "README.md"
+        "README.md",
+        "example.html"
     ]
 }
