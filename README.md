@@ -12,12 +12,20 @@ Bubblesub uses the DOM event for discovery and binding of dependencies. A subscr
 
 The only required coupling is on the name of the dependency. Bubblesub is implemented in Typescript. So we have the support of typing to make it easier to manage the decoupled implementation.
 
+### Run Example
+
+```shell script
+yarn build.example
+yarn serve
+## open browser at http://localhost:8080
+```
+
 ### Publishing
 
 A high-level component responsible for making a backend request fetches and publishes the result. 
 
 ```typescript
-import {Publication, publisher } from "./publisher"; 
+import {Publication, publisher } from "bubblesub"; 
 
 let pub:Publication<number> = publisher(this.root).createPublication('percent', 0)
 
@@ -32,8 +40,29 @@ fetch('http://example.com/progress/status')
 In some component we consume and display the percentage value.
 
 ```typescript
-import { subscriber } from "./subscriber";
+import { subscriber } from "bubblesub";
 
 subscriber(this)
 .request( 'percent', (percent: number) => this.innerHTML = `<span>${percent}</span>` )
 ```
+
+### Example
+
+Imagine a progress dialog that can be used to show download progress. At the top of the DOM there is a FileService that publishes information about a file being downloaded. The Progress Dialog subscribes to have access to the FileService. The Progress Bar subscribes to receive percent changes. 
+
+```html
+<body>
+    <!-- file service is published from the body   -->
+    <progress-dialog>
+        <!-- progress dialog subscribes to the file service to get file download updates -->
+        <progress-bar>
+            <!-- progress bar subscribes to the 'percent' publishable which the progress dialog publishes-->
+        </progress-bar>
+    </progress-dialog>
+
+    <script type="module" src="./lib/index.umd.min.js"></script>
+</body>
+
+```
+
+See the example [html](example.html) and [js](src/test) implementation

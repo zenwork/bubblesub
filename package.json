@@ -1,6 +1,6 @@
 {
     "name"       : "bubblesub",
-    "version"    : "0.0.1-dev.2",
+    "version"    : "0.0.1-dev.3",
     "description": "dependnecy injection using DOM events",
     "main"       : "lib/index.cjs.js",
     "module"     : "lib/index.esm.js",
@@ -18,10 +18,10 @@
     ],
     "scripts"    : {
         "serve"        : "es-dev-server -c es-dev-server.config.js -w",
-        "build.watch"  : "preppy --watch --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example --verbose",
-        "build.example": "preppy --entry-lib=src/test/index.ts --entry-browser=src/test/index.ts --output=example",
-        "build"        : "preppy --entry-lib=src/index.ts --entry-browser=src/index.ts --output=lib",
-        "prepare"      : "rm -rf exmple lib && yarn lint && yarn build && yarn build.example",
+        "build.watch"  : "preppy --watch --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts",
+        "build.example": "preppy --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts",
+        "build"        : "preppy",
+        "prepare"      : "rm -rf example lib && yarn lint && yarn build",
         "lint"         : "tslint -c tslint.json 'src/**/*.ts'"
     },
     "devDependencies": {
@@ -39,9 +39,7 @@
         "typescript"                             : "^3.6.2"
     },
     "files"          : [
-        "example",
         "lib",
-        "README.md",
-        "example.html"
+        "README.md"
     ]
 }
