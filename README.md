@@ -65,4 +65,4 @@ Imagine a progress dialog that can be used to show download progress. At the top
 
 ```
 
-See the example [html](example.html) and [js](src/test) implementation
+See the example [html](example.html) and [js](src/example) implementation
