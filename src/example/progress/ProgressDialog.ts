@@ -1,5 +1,5 @@
-import { Publication, publisher } from '../publisher'
-import { subscriber } from '../subscriber'
+import { Publication, publisher } from '../../publisher'
+import { subscriber } from '../../subscriber'
 import { FileService } from './FileService'
 
 export class ProgressDialog extends HTMLElement {

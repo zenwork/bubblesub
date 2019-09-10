@@ -1,45 +1,48 @@
 {
-    "name"       : "bubblesub",
-    "version"    : "0.0.1-dev.5",
+    "name": "bubblesub",
+    "version": "0.0.1-dev.5",
     "description": "dependnecy injection using DOM events",
-    "main"       : "lib/index.cjs.js",
-    "module"     : "lib/index.esm.js",
-    "unpkg"      : "lib/index.umd.min.js",
-    "types"      : "lib/index.d.ts",
-    "repository" : "https://github.com/zenwork/bubblesub.git",
-    "author"     : "Florian Hehlen <florian@hehlen.name>",
-    "license"    : "MIT",
-    "keywords"   : [
+    "main": "lib/index.cjs.js",
+    "module": "lib/index.esm.js",
+    "unpkg": "lib/index.umd.min.js",
+    "types": "lib/index.d.ts",
+    "repository": "https://github.com/zenwork/bubblesub.git",
+    "author": "Florian Hehlen <florian@hehlen.name>",
+    "license": "MIT",
+    "keywords": [
         "typescript",
         "DI",
         "publisher",
         "subscriber",
         "event"
     ],
-    "scripts"    : {
-        "serve"        : "es-dev-server -c es-dev-server.config.js -w",
-        "build.watch"  : "preppy --watch --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts",
+    "scripts": {
+        "serve": "es-dev-server -c es-dev-server.config.js -w",
+        "build.watch": "preppy --watch --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts",
         "build.example": "preppy --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts",
-        "build"        : "preppy",
-        "prepare"      : "rm -rf example lib && yarn lint && yarn build",
-        "lint"         : "tslint -c tslint.json 'src/**/*.ts'"
+        "build": "preppy",
+        "prepare": "rm -rf example lib && yarn lint && yarn build",
+        "lint": "tslint -c tslint.json 'src/**/*.ts'"
     },
     "devDependencies": {
-        "@babel/core"                            : "^7.6.0",
+        "@babel/core": "^7.6.0",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
-        "@babel/plugin-proposal-decorators"      : "^7.6.0",
-        "@babel/plugin-transform-runtime"        : "^7.6.0",
-        "@babel/preset-env"                      : "^7.6.0",
-        "@babel/preset-typescript"               : "^7.6.0",
-        "@babel/runtime"                         : "^7.6.0",
-        "corejs"                                 : "^1.0.0",
-        "es-dev-server"                          : "^1.17.2",
-        "preppy"                                 : "^8.3.1",
-        "tslint"                                 : "^5.19.0",
-        "typescript"                             : "^3.6.2"
+        "@babel/plugin-proposal-decorators": "^7.6.0",
+        "@babel/plugin-transform-runtime": "^7.6.0",
+        "@babel/preset-env": "^7.6.0",
+        "@babel/preset-typescript": "^7.6.0",
+        "@babel/runtime": "^7.6.0",
+        "corejs": "^1.0.0",
+        "es-dev-server": "^1.17.2",
+        "preppy": "^8.3.1",
+        "tslint": "^5.19.0",
+        "typescript": "^3.6.2"
     },
-    "files"          : [
+    "files": [
         "lib",
         "README.md"
-    ]
+    ],
+    "dependencies": {
+        "lit-html": "^1.1.2"
+    }
 }

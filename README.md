@@ -70,10 +70,13 @@ subscriber(this)
 
 A basic example implementing a virtual progress dialog can be found in the code
 
-See the example [html](example.html) and [js](src/example) implementation
+See the example [html](src/example/progress/index.html) and [js](src/example/progress) implementation
 
 #### DI
 
+This example shows how a simple counter service can be injected into a web component. The component is coupled on the name (`'service.counter'`) and the declared typescript interface (`SequenceService`)
+
+See this example's [html](src/example/di/index.html) and [js](src/example/di) implementation
 #### State Management
 
 #### Data Streaming
