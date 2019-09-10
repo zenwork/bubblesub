@@ -30,9 +30,9 @@ So...
 
 The only required coupling is on the name of the dependency. Bubblesub is implemented in Typescript. So we have the support of typing to make it easier to manage the decoupled implementation.
 
-### Run Example
+### Run Examples
 
-A simple example devised for testing is available if you checkout the project and build it.
+A set of examples devised for demonstrating and testing is available if you checkout the project and build it. For the sake of clarity the examples are implemented using vanilla JS web components.
 
 ```shell script
 yarn build.example
@@ -67,6 +67,8 @@ subscriber(this)
 ```   
 
 ## Examples
+
+#### Progress Bar
 
 A basic example implementing a virtual progress dialog can be found in the code
 
