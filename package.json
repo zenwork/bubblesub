@@ -1,6 +1,6 @@
 {
     "name": "bubblesub",
-    "version": "0.0.1-dev.5",
+    "version": "0.0.1-dev.6",
     "description": "dependnecy injection using DOM events",
     "main": "lib/index.cjs.js",
     "module": "lib/index.esm.js",
