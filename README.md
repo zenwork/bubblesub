@@ -11,7 +11,7 @@ The use-cases include:
 * inversion of control
 * shared services and factories
 
-This work comes out of an urge to free JS/TS development from big frameworks. It is not meant as a silver bullet or a universal tool. But it is clear that there are some situations where being able to decouple providers from consumers makes sense. For example, a loosely coupled set of web components (based on the [specification](https://developer.mozilla.org/en-US/docs/Web/Web_Components) or otherwise) because it can be inconvenient or even bad design to maintain explicit dependencies.
+This work comes out of an urge to free JS/TS development from big frameworks. It is not meant as a silver bullet or a universal tool. But it is clear that there are some situations where being able to decouple providers from consumers makes sense.
 
 This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who heads work on Polymer lit-element and lit-html. A recording can be found on youtube: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
 
