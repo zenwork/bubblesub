@@ -2,19 +2,22 @@
 
 ***NOTE: This library is experimental!***
 
-This is a simple library that provides a light weight observable or pub/sub pattern that make the implementation of other common patterns easier :
+This is a simple library that provides an implemenation of the observable pattern the leverages the DOM and events to make implementing common patterns easier. 
 
-* Dependency injection
-* State Management
-* Streaming of data
-* Inversion of control
-* Abstraction through service and factories
+The use-cases include:
+* dependency injection
+* state management
+* streaming of data
+* inversion of control
+* shared services and factories
 
-Bubblesub provides the common benefit of sharing services, factories, and data without having to tightly couple component construction. It can also be used to stream data. It is not meant as a silver bullet or a universal tool.
+This work comes out of an urge to free JS/TS development from big frameworks. It is not meant as a silver bullet or a universal tool. But it is clear that there are some situations where being able to decouple providers from consumers makes sense. For example, a loosely coupled set of web components (based on the [specification](https://developer.mozilla.org/en-US/docs/Web/Web_Components) or otherwise) because it can be inconvenient or even bad design to maintain explicit dependencies.
 
-Bubblesub uses the DOM event for discovery and binding of dependencies. A subscription fires an event up the DOM tree. If a matching publication exists up the DOM tree then a binding is established. Any time the Publication;s value changes the the subscriber is called 
+This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who heads work on Polymer lit-element and lit-html. A recording can be found on youtube: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
 
-When creating a set of loosely coupled web components (based on the [specification](https://developer.mozilla.org/en-US/docs/Web/Web_Components) or otherwise) it is often necessary for them to share common services or data. It can be inconvenient or even not desirable to maintain explicit dependencies.
+## Leveraging the DOM and events
+
+Bubblesub uses the DOM event for discovery and binding. A subscription fires an event up the DOM tree. If a matching publication exists up the DOM tree then a binding is established. Any time the Publication;s value changes the the subscriber is called 
 
 So...
 * Bubblesub uses bubbling events in the DOM to link subscribers and publishers
@@ -63,9 +66,9 @@ subscriber(this)
 .request( 'percent', (percent: number) => this.innerHTML = `<span>${percent}</span>` )
 ```   
 
-### Examples
+## Examples
 
-Imagine a progress dialog that can be used to show download progress. At the top of the DOM there is a FileService that publishes information about a file being downloaded. The Progress Dialog subscribes to have access to the FileService. The Progress Bar subscribes to receive percent changes. 
+A basic example implementing a virtual progress dialog can be found in the code
 
 See the example [html](example.html) and [js](src/example) implementation
 
