@@ -7,7 +7,7 @@ export class CounterExample extends HTMLElement {
 
   connectedCallback(): void {
     subscriber(this)
-      .request('service.fibonacci', (srv: SequenceService) => this.service = srv)
+      .request('service.counter', (srv: SequenceService) => this.service = srv)
     this.render()
   }
 

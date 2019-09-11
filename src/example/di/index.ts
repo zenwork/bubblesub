@@ -16,4 +16,4 @@ class CounterService implements SequenceService {
 
 }
 
-publisher(document.body).createPublication('service.fibonacci', new CounterService())
+publisher(document.body).createPublication('service.counter', new CounterService())

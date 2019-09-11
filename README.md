@@ -2,28 +2,28 @@
 
 ***NOTE: This library is experimental!***
 
-This is a simple library that provides an implemenation of the observable pattern the leverages the DOM and events to make implementing common patterns easier. 
+Bubblesub is a simple library to create observables. It leverages the DOM and browser events to reduce coupling and making things simple. 
 
-The use-cases include:
+You can easily implement:
 * dependency injection
 * state management
 * streaming of data
 * inversion of control
 * shared services and factories
 
-This work comes out of an urge to free JS/TS development from big frameworks. It is not meant as a silver bullet or a universal tool. But it is clear that there are some situations where being able to decouple providers from consumers makes sense.
+Bubblesub comes out of an urge to free JS/TS development from big frameworks. It is not meant as a silver bullet or a universal solution.
 
 This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who heads work on Polymer lit-element and lit-html. A recording can be found on youtube: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
 
 ## Leveraging the DOM and events
 
-Bubblesub uses the DOM event for discovery and binding. A subscription fires an event up the DOM tree. If a matching publication exists up the DOM tree then a binding is established. Any time the Publication;s value changes the the subscriber is called 
+Bubblesub uses DOM events for discovery and binding of publishers and subscribers. A subscription fires an event up the DOM tree. If a matching publication exists up the DOM tree then a binding is established. Any time the Publication's value changes the the subscribers are called. 
 
 So...
 * Bubblesub uses bubbling events in the DOM to link subscribers and publishers
 * Bubblesub requires that the publisher of a Publication be an ancestor of the subscriber
-* Bubblesub relies on the hierarchical nature of the DOM to bind publisher and subscriber. The subscriber is bound to the closest ancestor that publishes the desired publishable
-* There is no central registry of Publications. This means that your Bubblesub bindings can be encapsulated within a parent component, leak nothing, require nothing from outside
+* Bubblesub relies on the hierarchical nature of the DOM to bind publisher and subscriber. A subscriber is bound to the closest ancestor that publishes the wanted Publication. 
+* There is no central registry of Publications. This means that your Bubblesub bindings can be encapsulated within a parent component, leak nothing, require nothing from outside.
  
 
 ## Usage
