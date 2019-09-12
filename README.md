@@ -47,7 +47,7 @@ A high-level component responsible for making a backend request fetches and publ
 ```typescript
 import {Publication, publisher } from "bubblesub"; 
 
-let pub:Publication<number> = publisher(this).createPublication('percent', 0)
+let pub:Publication<number> = publisher(this).create('percent', 0)
 
 fetch('http://example.com/progress/status')
   .then((response) =>response.json())

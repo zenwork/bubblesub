@@ -16,4 +16,4 @@ class CounterService implements SequenceService {
 
 }
 
-publisher(document.body).createPublication('service.counter', new CounterService())
+publisher(document.body).create('service.counter', new CounterService())

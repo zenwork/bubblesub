@@ -8,7 +8,7 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
    * @param parent
    */
   return {
-    createPublication: function createPublication<T>(name: string, initialValue: T): Publication<T> {
+    create: function createPublication<T>(name: string, initialValue: T): Publication<T> {
       const publication = new Publication<T>(name, initialValue)
 
       const requestListener = (event: CustomEvent) => {
