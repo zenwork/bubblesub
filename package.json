@@ -18,11 +18,12 @@
     ],
     "scripts"        : {
         "serve"        : "es-dev-server -c es-dev-server.config.js -w",
-        "build.watch"  : "preppy --watch --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts",
-        "build.example": "preppy --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts",
+        "build.watch"  : "preppy --watch --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts --entry-node=src/example/index.ts --entry-cli=src/example/index.ts",
+        "build.example": "preppy --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts --entry-node=src/example/index.ts --entry-cli=src/example/index.ts && mv -f lib examples",
         "build"        : "preppy",
-        "prepare"      : "rm -rf example lib && yarn lint && yarn build",
-        "lint"         : "tslint -c tslint.json 'src/**/*.ts'"
+        "prepare"      : "rm -rf examples lib && yarn lint && yarn build.example && yarn build",
+        "lint"         : "tslint -c tslint.json 'src/**/*.ts'",
+        "test": "testcafe \"chrome:headless\" -F \"Page.*\" ./tests/"
     },
     "devDependencies": {
         "@babel/core"                            : "^7.6.0",
@@ -35,11 +36,13 @@
         "corejs"                                 : "^1.0.0",
         "es-dev-server"                          : "^1.17.2",
         "preppy"                                 : "^8.3.1",
+        "testcafe"                               : "^1.5.0",
         "tslint"                                 : "^5.19.0",
         "typescript"                             : "^3.6.2"
     },
     "files"          : [
         "lib",
+        "examples",
         "README.md"
     ]
 }
