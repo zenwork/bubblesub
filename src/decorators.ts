@@ -3,6 +3,7 @@ import { subscriber } from './subscriber'
 export function sub(name: string = null) {
   return (target: any, key: string) => {
     const pKey = `_${key}`
+    if (name === null) name = key
 
     // tslint:disable-next-line:only-arrow-functions
     const init = function(isGet: boolean) {

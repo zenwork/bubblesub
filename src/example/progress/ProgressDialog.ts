@@ -34,7 +34,7 @@ export class ProgressDialog extends HTMLElement {
         // listen to download percent updates
         srv.download(p => {
           this.root.querySelector('.counter').innerHTML = `${p}%`
-          this.pub.updateValue(p)
+          this.pub.update(p)
         })
 
       })

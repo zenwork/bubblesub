@@ -3,7 +3,7 @@ export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest'
 
 export function subscriber(parent: HTMLElement | ShadowRoot) {
   /**
-   * Subscribe for changes to a subscibable. The updateValue is called once on subscription to get the initial value.
+   * Subscribe for changes to a subscibable. The update is called once on subscription to get the initial value.
    * @param name pub name
    * @param update function called once each time the pub changes
    * @param retry retry getting a handle on publication if it is not yet available.
@@ -74,6 +74,6 @@ export class PublicationRequest<T> {
 }
 
 /**
- * Publication updateValue callback
+ * Publication update callback
  */
 export type Update<T> = (updated: T | null) => void

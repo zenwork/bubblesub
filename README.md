@@ -72,16 +72,38 @@ subscriber(this)
 
 A basic example implementing a virtual progress dialog can be found in the code
 
-See the example [html](src/example/progress/index.html) and [js](src/example/progress) implementation
+See the example code [here](src/example/progress)
 
 #### DI
 
 This example shows how a simple counter service can be injected into a web component. The component is coupled on the name (`'service.counter'`) and the declared typescript interface (`SequenceService`)
 
-See this example's [html](src/example/di/index.html) and [js](src/example/di) implementation
+See this example code [here](src/example/di)
 #### State Management
 
 #### Data Streaming
+
+This example displays a list of fruit prices that are getting updated separately. It also introduces the `@sub()` decorator that makes binding a property to a subscription very easy.
+
+```typescript
+import { sub } from "./decorators"; 
+export class Ticker extends HTMLElement {
+
+  @sub('macintosh')
+  apples: number
+  
+  @sub()
+  bananas: number
+  
+ // rest of implementation  
+
+}
+
+```
+
+the decorator assumes the name of the property is also the subscription name. Otherwise a specific name can be specified.
+
+See this example code [here](src/example/streaming)
 
 #### Inversion of Control
 

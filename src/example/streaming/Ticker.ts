@@ -1,53 +1,28 @@
 import { sub } from '../../decorators'
+import { updateOnChange } from './util'
 
 export class Ticker extends HTMLElement {
 
-  @sub('apples')
-  apples: number = 0
+  @sub('macintosh')
+  apples: number
+  @sub()
+  bananas: number
+  @sub()
+  grapes: number
+  @sub('kiwi')
+  kiwis: number
+  @sub()
+  oranges: number
 
-  @sub('bananas')
-  bananas: number = 0
-
-  @sub('grapes')
-  grapes: number = 0
-
-  @sub('kiwis')
-  kiwis: number = 0
-
-  @sub('oranges')
-  oranges: number = 0
-
-  constructor() {
-    super()
-    this.innerHTML = `
-       <ul>
-        <li class="apples">apples: n/a</li>
-        <li class="bananas">bananas: n/a</li>
-        <li class="grapes">grapes: n/a</li>
-        <li class="kiwis">kiwis: n/a</li>
-        <li class="oranges">oranges n/a</li>
-      </ul>
-    `
-
-    this.watch('bananas')
-    this.watch('grapes')
-    this.watch('kiwis')
-    this.watch('oranges')
-
-    this.watch('apples')
-
-  }
-
-  private watch(name) {
-    let current = this[name]
-    setTimeout(() => {
-      if (current !== this[name]) {
-        // console.log('updating:' + name)
-        this.querySelector('.' + name).innerHTML = `<li class="${name}">${name}: ${this[name]}</li>`
-        current = this[name]
-      }
-      this.watch(name)
-    }, 10)
+  connectedCallback() {
+    this.innerHTML = '<ul class="prices"></ul>'
+    // watch local price changes and update DOM. Usually this is done by some library like
+    // lit-html, lit-element, or react
+    updateOnChange('bananas', this)
+    updateOnChange('grapes', this)
+    updateOnChange('kiwis', this)
+    updateOnChange('oranges', this)
+    updateOnChange('apples', this)
   }
 }
 

@@ -32,10 +32,10 @@ class PriceStreamer {
   constructor() {
     const pub = publisher(document.body)
 
-    this.prices.set('Apples', pub.create<number>('apples', 0))
+    this.prices.set('Macintosh', pub.create<number>('macintosh', 0))
     this.prices.set('Bananas', pub.create<number>('bananas', 0))
     this.prices.set('Grapes', pub.create<number>('grapes', 0))
-    this.prices.set('Kiwis', pub.create<number>('kiwis', 0))
+    this.prices.set('Kiwis', pub.create<number>('kiwi', 0))
     this.prices.set('Oranges', pub.create<number>('oranges', 0))
 
     this.prices.forEach((price, name) => {
@@ -44,7 +44,7 @@ class PriceStreamer {
       return generator(300, speed,
         value => {
           console.debug(name + ':' + value)
-          price.updateValue(value)
+          price.update(value)
         })
     })
 

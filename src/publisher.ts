@@ -47,7 +47,7 @@ export class Publication<T> {
     return this.publishedValue
   }
 
-  updateValue(value: T) {
+  update(value: T) {
     this.publishedValue = value
     this.subscriptions.forEach((val) => val(this.value))
   }
