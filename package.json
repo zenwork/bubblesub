@@ -19,11 +19,11 @@
     "scripts"        : {
         "serve"        : "es-dev-server -c es-dev-server.config.js -w",
         "build.watch"  : "preppy --watch --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts --entry-node=src/example/index.ts --entry-cli=src/example/index.ts",
-        "build.example": "preppy --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts --entry-node=src/example/index.ts --entry-cli=src/example/index.ts && mv -f lib examples",
+        "build.example": "preppy --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts --entry-node=src/example/index.ts --entry-cli=src/example/index.ts",
         "build"        : "preppy",
-        "prepare"      : "rm -rf examples lib && yarn lint && yarn build.example && yarn build",
+        "prepare"      : "rm -rf examples lib && yarn lint && yarn build.example && yarn test && mv -f lib examples && yarn build",
         "lint"         : "tslint -c tslint.json 'src/**/*.ts'",
-        "test": "testcafe \"chrome:headless\" -F \"Page.*\" ./tests/"
+        "test"         : "testcafe \"chrome:headless\" test/"
     },
     "devDependencies": {
         "@babel/core"                            : "^7.6.0",
