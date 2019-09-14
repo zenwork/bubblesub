@@ -51,7 +51,7 @@ let pub:Publication<number> = publisher(this).create('percent', 0)
 
 fetch('http://example.com/progress/status')
   .then((response) =>response.json())
-  .then((progress) => pub.updateValue(progress.status));
+  .then((progress) => pub.update(progress.status));
 
 ```
 
@@ -64,7 +64,17 @@ import { subscriber } from "bubblesub";
 
 subscriber(this)
 .request( 'percent', (percent: number) => this.innerHTML = `<span>${percent}</span>` )
-```   
+```  
+Subscription can also be accomplished with a decorator
+```typescript
+class MyClass {
+
+  @sub()
+  myobservable
+
+}
+
+```
 
 ## Examples
 
