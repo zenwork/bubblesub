@@ -1,5 +1,5 @@
 module.exports = {
-  port: 8080,
+  port: 8888,
   watch: true,
   nodeResolve: true,
   appIndex: 'index.html',

@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 
-fixture`Streams`.page`http://localhost:8080/src/example/streaming/index.html`
+fixture`Streams`.page`http://localhost:8888/src/example/streaming/index.html`
 
 test('all 5 prices are received', async t => {
     let apples = await Selector('.apples')
