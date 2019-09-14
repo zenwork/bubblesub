@@ -40,7 +40,7 @@ module.exports = (api) => {
           allExtensions: true,
           isTSX: true,
         },
-      ],
+      ]
     ],
   };
 };

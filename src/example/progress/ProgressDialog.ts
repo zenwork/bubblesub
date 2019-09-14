@@ -10,7 +10,7 @@ export class ProgressDialog extends HTMLElement {
   constructor() {
     super()
     this.root = this.attachShadow({mode: 'open'})
-    this.pub = publisher(this.root).createPublication('percent', 0)
+    this.pub = publisher(this.root).create('percent', 0)
 
     this.root.innerHTML = `
        <h1>CHUNK DOWNLOAD</h1>
@@ -34,7 +34,7 @@ export class ProgressDialog extends HTMLElement {
         // listen to download percent updates
         srv.download(p => {
           this.root.querySelector('.counter').innerHTML = `${p}%`
-          this.pub.updateValue(p)
+          this.pub.update(p)
         })
 
       })
