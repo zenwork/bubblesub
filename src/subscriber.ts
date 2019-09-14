@@ -1,7 +1,7 @@
 import { Publication } from './publisher'
 export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest'
 
-export function subscriber(parent: HTMLElement) {
+export function subscriber(parent: HTMLElement | ShadowRoot) {
   /**
    * Subscribe for changes to a subscibable. The updateValue is called once on subscription to get the initial value.
    * @param name pub name

@@ -38,11 +38,15 @@ class PriceStreamer {
     this.prices.set('Kiwis', pub.create<number>('kiwis', 0))
     this.prices.set('Oranges', pub.create<number>('oranges', 0))
 
-    this.prices.forEach((price, name) => generator(300, getRandomInt(100, 5000),
-      value => {
-        console.debug(name + ':' + value)
-        price.updateValue(value)
-      }))
+    this.prices.forEach((price, name) => {
+      const speed = getRandomInt(100, 5000)
+      console.log(`publishing prices for ${name} every ${speed} millis`)
+      return generator(300, speed,
+        value => {
+          console.debug(name + ':' + value)
+          price.updateValue(value)
+        })
+    })
 
   }
 

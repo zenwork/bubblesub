@@ -1,33 +1,53 @@
-import { subscriber } from '../../subscriber'
+import { sub } from '../../decorators'
 
 export class Ticker extends HTMLElement {
 
+  @sub('apples')
   apples: number = 0
+
+  @sub('bananas')
+  bananas: number = 0
+
+  @sub('grapes')
+  grapes: number = 0
+
+  @sub('kiwis')
+  kiwis: number = 0
+
+  @sub('oranges')
+  oranges: number = 0
 
   constructor() {
     super()
     this.innerHTML = `
-      <ul>
-        <li class="apples">n/a</li>
-        <li class="bananas">n/a</li>
-        <li class="grapes">n/a</li>
-        <li class="kiwis">n/a</li>
-        <li class="oranges">n/a</li>
+       <ul>
+        <li class="apples">apples: n/a</li>
+        <li class="bananas">bananas: n/a</li>
+        <li class="grapes">grapes: n/a</li>
+        <li class="kiwis">kiwis: n/a</li>
+        <li class="oranges">oranges n/a</li>
       </ul>
     `
-    this.sub('apples')
-    this.sub('bananas')
-    this.sub('grapes')
-    this.sub('kiwis')
-    this.sub('oranges')
+
+    this.watch('bananas')
+    this.watch('grapes')
+    this.watch('kiwis')
+    this.watch('oranges')
+
+    this.watch('apples')
+
   }
 
-  private sub(name) {
-    subscriber(this)
-      .request<number>(name, price => {
-        this.querySelector('.' + name).innerHTML = `<li class="${name}">${name}: ${price}</li>`
-        this.apples = price
-      })
+  private watch(name) {
+    let current = this[name]
+    setTimeout(() => {
+      if (current !== this[name]) {
+        // console.log('updating:' + name)
+        this.querySelector('.' + name).innerHTML = `<li class="${name}">${name}: ${this[name]}</li>`
+        current = this[name]
+      }
+      this.watch(name)
+    }, 10)
   }
 }
 
