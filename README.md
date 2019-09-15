@@ -17,7 +17,7 @@ This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who hea
 
 Here is an example on StackBlitz:
 [StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo)
-See more examples [here](examples/README.md)
+See more examples [here](src/example/README.md)
 
 ### Publishing
 
@@ -133,5 +133,5 @@ yarn serve
 ## open browser at http://localhost:8080
 ```
 
-[Docs on Examples](examples/README.md)
+[Docs on Examples](src/example/README.md)
 
