@@ -17,7 +17,8 @@ This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who hea
 
 Here is an example on StackBlitz:
 [StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo)
-See more examples [here](src/example/README.md)
+
+See more examples [here](src/example)
 
 ### Publishing
 
