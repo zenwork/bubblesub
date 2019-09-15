@@ -15,10 +15,10 @@ This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who hea
 
 ## It's Easy
 
-Here is an example on StackBlitz:
-[StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo)
+Here is an example on StackBlitz that integrates with [lit-element](https://lit-element.polymer-project.org/) :
+[StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo) 
 
-See more examples [here](src/example)
+There are some other examples in this repo that are implemented as standalone Web Components. Finde them [here](src/example).
 
 ### Publishing
 
