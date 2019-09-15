@@ -8,12 +8,104 @@ You can easily implement:
 * dependency injection
 * state management
 * streaming of data
-* inversion of control
-* shared services and factories
 
 Bubblesub comes out of an urge to free JS/TS development from big frameworks. It is not meant as a silver bullet or a universal solution.
 
 This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who heads work on Polymer lit-element and lit-html. A recording can be found on youtube: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
+
+## It's Easy
+
+Here is an example on StackBlitz:
+[StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo)
+
+### Publishing
+
+Here is an example of a higher-level component that publishes a calculator as a service. 
+
+```typescript
+import { LitElement, customElement, html } from 'lit-element'
+import { pub } from 'bubblesub'
+import { Calculator } from 'calculator'
+
+//Parent calculator component
+@customElement('demo-calculator')
+class App extends LitElement {
+
+  @pub()
+  calc: Calculator = new Calculator()
+
+  render() {
+    return html`<h1>Calculator</h1><slot></slot>`;
+  }
+}
+
+```
+
+### Subscribing
+
+Here is a child element that can be repeated as many times as is needed.
+
+```typescript
+import { LitElement, customElement, html } from 'lit-element'
+import { sub } from 'bubblesub'
+import { Calculator } from 'calculator'
+
+@customElement('demo-val')
+class Value extends LitElement {
+
+  @sub()
+  calc: Calculator
+
+  render() {
+    return html`
+    <input 
+      type="number" 
+      @change="${(e) => { this.calc.set(parseInt(this.id), parseInt(e.target.value)) }}" >
+    </input>`
+  }
+}
+
+```
+
+Here is a child element that displays the total of the calculation
+
+```typescript
+import { LitElement, customElement, html } from 'lit-element'
+import { sub } from 'bubblesub'
+import { Calculator } from 'calculator'
+  
+@customElement('demo-total')
+class Total extends LitElement {
+
+  @sub({ update: function (calc: Calculator) { calc.onChange(() => { this.requestUpdate() }) } })
+  calc: Calculator
+
+  render() {
+    return html`
+    <input 
+      type="number" 
+      value="${this.calc.total()}" 
+      readonly>
+    </input>`
+  }
+}
+```
+
+### HTML
+
+Here the components are combined. The `demo-val` elements find the calculator service because they have an ancestor, demo-calculator that provides the service.
+
+```html
+  <demo-calculator>
+    <demo-val id="1"></demo-val>
+    +
+    <demo-val id="2"></demo-val>
+    +
+    <demo-val id="3"></demo-val>
+    =
+    <demo-total></demo-total>
+  </demo-calculator>
+```
 
 ## Leveraging the DOM and events
 
@@ -40,41 +132,6 @@ yarn serve
 ## open browser at http://localhost:8080
 ```
 
-### Publishing
-
-A high-level component responsible for making a backend request fetches and publishes the result.  
-
-```typescript
-import {Publication, publisher } from "bubblesub"; 
-
-let pub:Publication<number> = publisher(this).create('percent', 0)
-
-fetch('http://example.com/progress/status')
-  .then((response) =>response.json())
-  .then((progress) => pub.update(progress.status));
-
-```
-
-### Subscribing
-
-In some component we consume and display the percentage value.
-
-```typescript
-import { subscriber } from "bubblesub";
-
-subscriber(this)
-.request( 'percent', (percent: number) => this.innerHTML = `<span>${percent}</span>` )
-```  
-Subscription can also be accomplished with a decorator
-```typescript
-class MyClass {
-
-  @sub()
-  myobservable
-
-}
-
-```
 
 ## Examples
 
