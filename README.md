@@ -17,6 +17,7 @@ This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who hea
 
 Here is an example on StackBlitz:
 [StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo)
+See more examples [here](examples/README.md)
 
 ### Publishing
 
@@ -132,46 +133,5 @@ yarn serve
 ## open browser at http://localhost:8080
 ```
 
+[Docs on Examples](examples/README.md)
 
-## Examples
-
-#### Progress Bar
-
-A basic example implementing a virtual progress dialog can be found in the code
-
-See the example code [here](src/example/progress)
-
-#### DI
-
-This example shows how a simple counter service can be injected into a web component. The component is coupled on the name (`'service.counter'`) and the declared typescript interface (`SequenceService`)
-
-See this example code [here](src/example/di)
-#### State Management
-
-#### Data Streaming
-
-This example displays a list of fruit prices that are getting updated separately. It also introduces the `@sub()` decorator that makes binding a property to a subscription very easy.
-
-```typescript
-import { sub } from "./decorators"; 
-export class Ticker extends HTMLElement {
-
-  @sub('macintosh')
-  apples: number
-  
-  @sub()
-  bananas: number
-  
- // rest of implementation  
-
-}
-
-```
-
-the decorator assumes the name of the property is also the subscription name. Otherwise a specific name can be specified.
-
-See this example code [here](src/example/streaming)
-
-#### Inversion of Control
-
-#### Services
