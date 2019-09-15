@@ -1,38 +1,89 @@
-import { subscriber } from './subscriber'
+import { Publication, publisher } from './publisher'
+import { subscriber, Update } from './subscriber'
 
-export function sub(name: string = null) {
+export class SubConfig<T> {
+  name?: string = null
+  update?: Update<T> = null
+}
+
+/**
+ * @param config
+ */
+export function sub<T>(config: SubConfig<T> = {}) {
+  const conf = {...config}
   return (target: any, key: string) => {
-    const pKey = `_${key}`
-    if (name === null) name = key
 
-    // tslint:disable-next-line:only-arrow-functions
-    const init = function(isGet: boolean) {
-      let subscribed = false
+    if (!conf.name) conf.name = key
+    let value
 
-      return function(newVal?) {
+    let subscribed = false
+
+    function init(isGet: boolean) {
+
+      return function accessor(newVal?: T): T | void {
+
         if (!subscribed) {
-          subscriber(this).request(name, v => this[pKey] = v)
+          let up
+          if (conf.update) {
+            up = (v: T | null) => {
+              conf.update.apply(this, [v])
+              value = v
+            }
+          } else {
+            up = v => value = v
+          }
+          subscriber(this).request<T>(conf.name, up)
           subscribed = true
         }
-        // Define hidden property
-        Object.defineProperty(this, pKey, {value: 0, enumerable: false, configurable: true, writable: true})
-        // Define public property
-        Object.defineProperty(this, key, {
-          get: () => {
-            return this[pKey]
-          },
-          set: (val) => {
-            this[pKey] = val + 1
-          },
-          enumerable: true,
-          configurable: true
-        })
-
-        // Perform original action
         if (isGet) {
-          return this[key] // get
+          return value
         } else {
-          this[key] = newVal // set
+          value = newVal
+        }
+      }
+    }
+
+    // Override property to let init occur on first get/set
+    return Object.defineProperty(target, key, {
+      get: init(true),
+      set: init(false),
+      enumerable: true,
+      configurable: true
+    })
+  }
+}
+
+export class PubConfig<T> {
+  name?: string
+  initialValue?: T
+  pubTarget?: HTMLElement | ShadowRoot
+}
+
+export function pub<T>(config: PubConfig<T> = {}) {
+  const conf = {...config}
+  return (target: any, key: string) => {
+
+    if (!conf.name) conf.name = key
+    let publication: Publication<T>
+    let value: T = conf.initialValue
+
+    function init(isGet: boolean) {
+
+      return function accessor(newVal?: T): T | void {
+
+        if (!publication) {
+          if (conf.pubTarget) {
+            publication = publisher(conf.pubTarget).create<T>(conf.name, conf.initialValue)
+          } else {
+            publication = publisher(this).create<T>(conf.name, conf.initialValue)
+          }
+        }
+
+        if (isGet) {
+          return value
+        } else {
+          value = newVal
+          publication.update(newVal)
         }
       }
     }

@@ -1,4 +1,4 @@
-import { Publication, publisher } from '../../publisher'
+import { pub } from '../../decorators'
 
 export { Ticker } from './Ticker'
 
@@ -25,29 +25,41 @@ function generator(size: number, speed: number, callback: (value: number) => voi
 
 }
 
+const config = {initialValue: 0, pubTarget: document.body}
+
 // Start price streams
 class PriceStreamer {
-  prices: Map<string, Publication<number>> = new Map()
+
+  @pub(config)
+  macintosh: number
+
+  @pub(config)
+  bananas: number
+
+  @pub(config)
+  grapes: number
+
+  @pub(config)
+  kiwi: number
+
+  @pub(config)
+  oranges: number
 
   constructor() {
-    const pub = publisher(document.body)
+    this.updatePrice('macintosh')
+    this.updatePrice('bananas')
+    this.updatePrice('grapes')
+    this.updatePrice('kiwi')
+    this.updatePrice('oranges')
+  }
 
-    this.prices.set('Macintosh', pub.create<number>('macintosh', 0))
-    this.prices.set('Bananas', pub.create<number>('bananas', 0))
-    this.prices.set('Grapes', pub.create<number>('grapes', 0))
-    this.prices.set('Kiwis', pub.create<number>('kiwi', 0))
-    this.prices.set('Oranges', pub.create<number>('oranges', 0))
-
-    this.prices.forEach((price, name) => {
-      const speed = getRandomInt(100, 5000)
-      console.log(`publishing prices for ${name} every ${speed} millis`)
-      return generator(300, speed,
-        value => {
-          console.debug(name + ':' + value)
-          price.update(value)
-        })
-    })
-
+  updatePrice(name) {
+    const speed = getRandomInt(200, 1000)
+    console.log(`NEW publishing prices for ${name} every ${speed} millis`)
+    generator(300, speed,
+      value => {
+        this[name] = value
+      })
   }
 
 }

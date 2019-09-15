@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from 'testcafe'
 
 fixture`Streams`.page`http://localhost:8888/src/example/streaming/index.html`
 
@@ -32,9 +32,28 @@ test('all 5 prices are received', async t => {
 )
 test('prices change', async t => {
     let apples = await Selector('.apples')
-    let price = await apples.textContent
-    await t.wait(6000)
-      .expect(price)
-      .notEql(Selector('.apples').textContent)
+    let applePrice = await apples.textContent
+
+    let kiwis = await Selector('.kiwis')
+    let kiwiPrice = await kiwis.textContent
+
+    let change = await Selector('.change')
+    let priceChange = await change.textContent
+
+    await t.wait(1500)
+    let p = await Selector('.apples').textContent
+
+    await t.expect(applePrice)
+      .notEql(p)
+      .expect((kiwiPrice))
+      .notEql(Selector('.kiwis').textContent)
+      .expect((priceChange))
+      .notEql(Selector('.change').textContent)
+
+    priceChange = await change.textContent
+
+    await t.wait(1500)
+      .expect((priceChange))
+      .notEql(Selector('.change').textContent)
   },
 )
