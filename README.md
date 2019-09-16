@@ -2,16 +2,14 @@
 
 ***NOTE: This library is experimental!***
 
-Bubblesub is a simple library to create observables. It leverages the DOM and browser events to reduce coupling and making things simple. 
+Bubblesub is a simple library to create observables. It leverages the DOM and DOM events to reduce coupling to make things simple and lightweight. 
 
-You can easily implement:
+With it, you can easily implement the following:
 * dependency injection
 * state management
-* streaming of data
+* data streaming
 
-Bubblesub comes out of an urge to free JS/TS development from big frameworks. It is not meant as a silver bullet or a universal solution.
-
-This approach is inspired from a talk by Justin Fagnani (@justinfugnani) who heads work on Polymer lit-element and lit-html. A recording can be found on youtube: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
+Bubblesub is inspired by a conference talk given by Justin Fagnani (@justinfugnani) who works on Polymer's lit-element and lit-html: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
 
 ## It's Easy
 
@@ -19,6 +17,14 @@ Here is an example on StackBlitz that integrates with [lit-element](https://lit-
 [StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo) 
 
 There are some other examples in this repo that are implemented as standalone Web Components. Finde them [here](src/example).
+
+## How it works
+
+* Bubbles sub use events to 'search' up the DOM for nodes that provide what you are lokking for. 
+* When found, it registers a callback on any change that happens to that thing
+* publishing and subscribing can be accomplished through typescript decorators (`@pub`, `@sub`) or through plain JS api. 
+* Bubblesub is written in Typescript and is provided with ES module bundling and d.ts files
+* Bubblesub has zero dependencies and targets web component (ie: custom elements, shadow dom) development. 
 
 ### Publishing
 
