@@ -26,8 +26,8 @@ export function sub<T>(config: SubConfig<T> = {}) {
           let up
           if (conf.update) {
             up = (v: T | null) => {
-              conf.update.apply(this, [v])
               value = v
+              conf.update.apply(this, [v])
             }
           } else {
             up = v => value = v

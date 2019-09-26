@@ -26,15 +26,15 @@ export function subscriber(parent: HTMLElement | ShadowRoot) {
       // request the publication
       parent.dispatchEvent(event)
 
-      tryIt()
+      tryIt(10)
 
-      function tryIt() {
+      function tryIt(timeout: number) {
         if (publication.value == null) {
           setTimeout(() => {
             console.debug('RETRY SUB: ' + publication.name)
             parent.dispatchEvent(event)
-            if (retry) tryIt()
-          }, 10)
+            if (retry) tryIt((timeout * 5))
+          }, timeout)
         } else {
           begin()
         }

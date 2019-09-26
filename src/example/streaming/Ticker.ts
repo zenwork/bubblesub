@@ -1,16 +1,10 @@
 import { sub } from '../../decorators'
-import { updateOnChange } from './util'
 
-const update = function(v: number) {
-  if (this.apples) {
-    this.lastPrice = this.apples
-    this.querySelector('.change').innerHTML = `apple price change: ${v - this.lastPrice}`
-  }
-}
+import { updateOnChange } from './util'
 
 export class Ticker extends HTMLElement {
 
-  @sub({name: 'macintosh', update})
+  @sub({name: 'macintosh', update(v: number) {this.update(v)}})
   apples: number
   @sub()
   bananas: number
@@ -35,6 +29,13 @@ export class Ticker extends HTMLElement {
     updateOnChange('kiwis', this)
     updateOnChange('oranges', this)
     updateOnChange('apples', this)
+  }
+
+  update(v: number) {
+    if (this.apples) {
+      this.querySelector('.change').innerHTML = `apple price change: ${v - this.lastPrice}`
+      this.lastPrice = this.apples
+    }
   }
 }
 

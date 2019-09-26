@@ -16,4 +16,12 @@ class CounterService implements SequenceService {
 
 }
 
-publisher(document.body).create('service.counter', new CounterService())
+export class ServiceContext extends HTMLElement {
+  constructor() {
+    super()
+    publisher(document.body).create('service.counter', new CounterService())
+
+  }
+}
+
+customElements.define('ex-service', ServiceContext)

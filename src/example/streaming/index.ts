@@ -25,10 +25,10 @@ function generator(size: number, speed: number, callback: (value: number) => voi
 
 }
 
-const config = {initialValue: 0, pubTarget: document.body}
+export const config = {initialValue: 0, pubTarget: document.body}
 
 // Start price streams
-class PriceStreamer {
+export class PriceStreamer {
 
   @pub(config)
   macintosh: number
@@ -55,7 +55,7 @@ class PriceStreamer {
 
   updatePrice(name) {
     const speed = getRandomInt(200, 1000)
-    console.log(`NEW publishing prices for ${name} every ${speed} millis`)
+    console.debug(`NEW publishing prices for ${name} every ${speed} millis`)
     generator(300, speed,
       value => {
         this[name] = value
@@ -64,4 +64,14 @@ class PriceStreamer {
 
 }
 
-new PriceStreamer()
+export class Prices extends HTMLElement {
+  priceStreamer: PriceStreamer
+
+  constructor() {
+    super()
+    console.log('start')
+    this.priceStreamer = new PriceStreamer()
+  }
+}
+
+customElements.define('ex-prices', Prices)
