@@ -6,7 +6,7 @@ export interface Todo {
 
 export type Selection = (index: number, value: Todo) => void
 
-export interface Todos {
+export interface Service {
   select(id: number)
 
   subscribe(callback: Selection)
@@ -21,7 +21,7 @@ export interface Todos {
 
 }
 
-export class TodoService implements Todos {
+export class TodoService implements Service {
   todoIndex: number = 0
   selectedIndex: number | null = null
   todos: Map<number, Todo> = new Map<number, Todo>()
