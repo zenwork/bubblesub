@@ -33,11 +33,6 @@ export class TodoApp extends HTMLElement {
       details: 'make sure there is enough for lunch tomorrow',
       status: {done: false, due: null}
     })
-
-    setTimeout(() => {
-      this.todoList.select(2)
-    }, 3000)
-
   }
 
 }

@@ -1,5 +1,5 @@
 import { sub } from '../../decorators'
-import { Todo, Service } from './service'
+import { Service, Todo } from './service'
 
 export class TodoList extends HTMLElement {
 
@@ -11,25 +11,34 @@ export class TodoList extends HTMLElement {
   })
   todoList: Service
 
+  selected: number
+
   connectedCallback() {
     // todo: this needed to trigger subscription!!!
     this.todoList
-  }
-
-  select(id: number) {
-    this.todoList.select(id)
   }
 
   render(todos: Map<number, Todo>) {
     console.log('render')
     this.innerHTML = '<h3>list</h3><ol>'
     todos.forEach((todo: Todo, key: number) => {
-      this.innerHTML = `${this.innerHTML}<li id="id${key}">${key} - ${todo.summary}</li>`
+      this.innerHTML = `${this.innerHTML}<li><input type="button" id="id${key}" value="${key} - ${todo.summary}"></inputbutton></li>`
     })
     this.innerHTML = `${this.innerHTML}</ol>`
+
+    todos.forEach((todo: Todo, key: number) => {
+      const btn: HTMLInputElement = this.querySelector(`#id${key}`)
+      btn.onclick = () => {
+        this.todoList.select(key)
+      }
+    })
   }
 
   highlight(index: number) {
+    if (this.selected || this.selected === 0) {
+      this.querySelector(`#id${this.selected}`).setAttribute('style', 'font-weight: normal;')
+    }
+    this.selected = index
     const element = this.querySelector(`#id${index}`)
 
     element.setAttribute(
