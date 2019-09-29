@@ -30,23 +30,11 @@ export const config = {initialValue: 0, pubTarget: document.body}
 // Start price streams
 export class PriceStreamer {
 
-  @pub(config)
-  macintosh: number
-
-  @pub(config)
-  bananas: number
-
-  @pub(config)
-  grapes: number
-
-  @pub(config)
-  kiwi: number
-
-  @pub(config)
-  oranges: number
+  @pub({initialValue: null, pubTarget: document.body})
+  priceStream: { name: string, price: number }
 
   constructor() {
-    this.updatePrice('macintosh')
+    this.updatePrice('apples')
     this.updatePrice('bananas')
     this.updatePrice('grapes')
     this.updatePrice('kiwi')
@@ -58,7 +46,8 @@ export class PriceStreamer {
     console.debug(`NEW publishing prices for ${name} every ${speed} millis`)
     generator(300, speed,
       value => {
-        this[name] = value
+        // this[name] = value
+        this.priceStream = {name, price: value}
       })
   }
 
