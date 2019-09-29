@@ -1,25 +1,9 @@
 import { sub } from '../../decorators'
-import { updateOnChange } from './util'
-
-const update = function(v: number) {
-  if (this.apples) {
-    this.lastPrice = this.apples
-    this.querySelector('.change').innerHTML = `apple price change: ${v - this.lastPrice}`
-  }
-}
 
 export class Ticker extends HTMLElement {
 
-  @sub({name: 'macintosh', update})
-  apples: number
-  @sub()
-  bananas: number
-  @sub()
-  grapes: number
-  @sub({name: 'kiwi'})
-  kiwis: number
-  @sub()
-  oranges: number
+  @sub({update(change) { this.updateOnChange(change)}})
+  priceStream: { name: string, price: number } | null
 
   lastPrice: number
 
@@ -28,13 +12,32 @@ export class Ticker extends HTMLElement {
         <ul class="prices"></ul>
         <h2 class="change">apple price change: </h2>
     `
-    // watch local price changes and update DOM. Usually this is done by some library like
-    // lit-html, lit-element, or react
-    updateOnChange('bananas', this)
-    updateOnChange('grapes', this)
-    updateOnChange('kiwis', this)
-    updateOnChange('oranges', this)
-    updateOnChange('apples', this)
+    this.priceStream
+  }
+
+  updateOnChange(change: { name: string, price: number }) {
+    this.updatePrice(change)
+    this.updateApplePriceChange(change)
+  }
+
+  private updateApplePriceChange(change: { name: string; price: number }) {
+    if (change.name === 'apples') {
+      this.querySelector('.change').innerHTML = `apple price change: ${change.price - this.lastPrice}`
+      this.lastPrice = change.price
+    }
+  }
+
+  private updatePrice(change: { name: string; price: number }) {
+    const element = this.querySelector('.' + change.name)
+    const template = `${change.name}: ${change.price}`
+    if (element) {
+      element.innerHTML = template
+    } else {
+      const item = document.createElement('li')
+      item.className = change.name
+      item.innerHTML = `${change.name}: ${change.price}`
+      this.querySelector('.prices').appendChild(item)
+    }
   }
 }
 

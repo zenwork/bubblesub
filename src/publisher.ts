@@ -8,7 +8,7 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
    * @param parent
    */
   return {
-    create: function createPublication<T>(name: string, initialValue: T): Publication<T> {
+    create: function createPublication<T>(name: string, initialValue: T | null): Publication<T> {
       const publication = new Publication<T>(name, initialValue)
 
       const requestListener = (event: CustomEvent) => {
@@ -36,18 +36,18 @@ export class Publication<T> {
 
   readonly name: string
   private subscriptions = new Array<Update<T>>()
-  private publishedValue: T
+  private publishedValue: T | null | undefined
 
-  constructor(name: string, value: T) {
+  constructor(name: string, value: T | null) {
     this.name = name
     this.publishedValue = value
   }
 
-  get value(): T {
+  get value(): T | undefined | null {
     return this.publishedValue
   }
 
-  update(value: T) {
+  update(value: T | null | undefined) {
     this.publishedValue = value
     this.subscriptions.forEach((val) => val(this.value))
   }

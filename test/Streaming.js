@@ -3,11 +3,13 @@ import { Selector } from 'testcafe'
 fixture`Streams`.page`http://localhost:8888/src/example/streaming/index.html`
 
 test('all 5 prices are received', async t => {
+
     let apples = await Selector('.apples')
     let oranges = await Selector('.oranges')
     let bananas = await Selector('.bananas')
     let grapes = await Selector('.grapes')
     let kiwis = await Selector('.kiwis')
+
     await t.expect(apples)
       .ok()
       .expect(apples.textContent)
@@ -31,6 +33,7 @@ test('all 5 prices are received', async t => {
   },
 )
 test('prices change', async t => {
+    await t.wait(1500)
     let apples = await Selector('.apples')
     let applePrice = await apples.textContent
 

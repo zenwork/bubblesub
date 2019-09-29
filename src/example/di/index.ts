@@ -1,6 +1,6 @@
 import { publisher } from '../../publisher'
 
-export { CounterExample } from './CounterExample'
+export { CounterView } from './CounterView'
 
 export interface SequenceService {
   next(): number

@@ -3,4 +3,13 @@ import { service } from './FileService'
 export { ProgressDialog } from './ProgressDialog'
 export { ProgressBar } from './ProgressBar'
 
-publisher(document.body).create('service', service)
+export class FileServiceComponent extends HTMLElement {
+
+  constructor() {
+    super()
+    publisher(document.body).create('file-service', service)
+
+  }
+}
+
+customElements.define('ex-files', FileServiceComponent)

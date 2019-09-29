@@ -1,7 +1,7 @@
 import { subscriber } from '../../subscriber'
 import { SequenceService } from './index'
 
-export class CounterExample extends HTMLElement {
+export class CounterView extends HTMLElement {
 
   service: SequenceService
 
@@ -29,4 +29,4 @@ export class CounterExample extends HTMLElement {
 
 }
 
-customElements.define('ex-counter', CounterExample)
+customElements.define('counter-view', CounterView)

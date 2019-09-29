@@ -25,28 +25,16 @@ function generator(size: number, speed: number, callback: (value: number) => voi
 
 }
 
-const config = {initialValue: 0, pubTarget: document.body}
+export const config = {initialValue: 0, pubTarget: document.body}
 
 // Start price streams
-class PriceStreamer {
+export class PriceStreamer {
 
-  @pub(config)
-  macintosh: number
-
-  @pub(config)
-  bananas: number
-
-  @pub(config)
-  grapes: number
-
-  @pub(config)
-  kiwi: number
-
-  @pub(config)
-  oranges: number
+  @pub({initialValue: null, pubTarget: document.body})
+  priceStream: { name: string, price: number }
 
   constructor() {
-    this.updatePrice('macintosh')
+    this.updatePrice('apples')
     this.updatePrice('bananas')
     this.updatePrice('grapes')
     this.updatePrice('kiwi')
@@ -55,10 +43,11 @@ class PriceStreamer {
 
   updatePrice(name) {
     const speed = getRandomInt(200, 1000)
-    console.log(`NEW publishing prices for ${name} every ${speed} millis`)
+    console.debug(`NEW publishing prices for ${name} every ${speed} millis`)
     generator(300, speed,
       value => {
-        this[name] = value
+        // this[name] = value
+        this.priceStream = {name, price: value}
       })
   }
 

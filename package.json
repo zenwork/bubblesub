@@ -1,11 +1,7 @@
 {
     "name"           : "bubblesub",
-    "version"        : "0.0.1-dev.10",
-    "description"    : "dependnecy injection using DOM events",
-    "main"           : "lib/index.cjs.js",
-    "module"         : "lib/index.esm.js",
-    "unpkg"          : "lib/index.umd.min.js",
-    "types"          : "lib/index.d.ts",
+    "version"        : "1.1.0",
+    "description"    : "Observables based on DOM events",
     "repository"     : "https://github.com/zenwork/bubblesub.git",
     "author"         : "Florian Hehlen <florian@hehlen.name>",
     "license"        : "MIT",
@@ -17,34 +13,58 @@
         "event"
     ],
     "scripts"        : {
-        "serve"        : "es-dev-server -c es-dev-server.config.js -w",
-        "build.watch"  : "preppy --watch --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts --entry-node=src/example/index.ts --entry-cli=src/example/index.ts",
-        "build.example": "preppy --entry-lib=src/example/index.ts --entry-browser=src/example/index.ts --entry-node=src/example/index.ts --entry-cli=src/example/index.ts",
-        "build"        : "preppy",
-        "prepare"      : "rm -rf examples lib && yarn lint && yarn build.example && yarn test && mv -f lib examples && yarn build",
-        "lint"         : "tslint -c tslint.json 'src/**/*.ts'",
-        "test"         : "testcafe \"chrome:headless\" test/",
-        "test.watch"   : "testcafe --live \"chrome:headless\" test/"
+        "serve"      : "es-dev-server -c es-dev-server.config.js -w",
+        "build.watch": "watch \"yarn build\" src",
+        "build"      : "pika build && tsc --emitDeclarationOnly --declaration ",
+        "clean"      : "rm -rf ./pkg",
+        "prepare"    : "yarn clean && yarn lint && yarn build && yarn minify",
+        "lint"       : "tslint -c tslint.json 'src/**/*.ts'",
+        "test"       : "jest",
+        "minify"     : "terser --source-map includeSources pkg/dist-web/index.js -o pkg/dist-web/index.min.js; terser --source-map includeSources pkg/dist-node/index.js -o pkg/dist-node/index.min.js"
     },
     "devDependencies": {
-        "@babel/core"                            : "^7.6.0",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
         "@babel/plugin-proposal-decorators"      : "^7.6.0",
-        "@babel/plugin-transform-runtime"        : "^7.6.0",
-        "@babel/preset-env"                      : "^7.6.0",
         "@babel/preset-typescript"               : "^7.6.0",
-        "@babel/runtime"                         : "^7.6.0",
-        "@babel/runtime-corejs3"                 : "^7.6.0",
-        "corejs"                                 : "^1.0.0",
+        "@pika/pack"                             : "^0.5.0",
+        "@pika/plugin-build-node"                : "^0.6.1",
+        "@pika/plugin-build-types"               : "^0.6.1",
+        "@pika/plugin-build-web"                 : "^0.6.1",
+        "@pika/plugin-standard-pkg"              : "^0.6.1",
+        "@pika/plugin-ts-standard-pkg"           : "^0.6.1",
+        "@types/jest"                            : "^24.0.18",
         "es-dev-server"                          : "^1.17.2",
-        "preppy"                                 : "^8.3.1",
-        "testcafe"                               : "^1.5.0",
+        "jest"                                   : "^24.9.0",
+        "jest-puppeteer"                         : "^4.3.0",
+        "pika-plugin-minify"                     : "^0.1.0",
+        "puppeteer"                              : "^1.20.0",
+        "terser"                                 : "^4.3.4",
         "tslint"                                 : "^5.19.0",
-        "typescript"                             : "^3.6.2"
+        "typescript"                             : "^3.6.0",
+        "watch"                                  : "^1.0.2"
     },
-    "files"          : [
-        "lib",
-        "examples",
-        "README.md"
-    ]
+    "@pika/pack"     : {
+        "pipeline": [
+            [
+                "@pika/plugin-ts-standard-pkg",
+                {
+                    "tsconfig": "./tsconfig.json",
+                    "exclude" : [
+                        "**/*.html",
+                        "tests/*",
+                        "unit-tests/*"
+                    ]
+                }
+            ],
+            [
+                "@pika/plugin-build-node"
+            ],
+            [
+                "@pika/plugin-build-web"
+            ]
+        ]
+    },
+    "jest"           : {
+        "preset": "jest-puppeteer"
+    }
 }
