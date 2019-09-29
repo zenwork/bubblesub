@@ -64,7 +64,7 @@ export class PublicationRequest<T> {
     this.name = name
   }
 
-  get value(): T | null {
+  get value(): T | null | undefined {
     return this.pub ? this.pub.value : null
   }
 
@@ -76,4 +76,4 @@ export class PublicationRequest<T> {
 /**
  * Publication update callback
  */
-export type Update<T> = (updated: T | null) => void
+export type Update<T> = (updated: T | null | undefined) => void

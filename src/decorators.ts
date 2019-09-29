@@ -2,19 +2,19 @@ import { Publication, publisher } from './publisher'
 import { subscriber, Update } from './subscriber'
 
 export class SubConfig<T> {
-  name?: string = null
-  update?: Update<T> = null
+  name?: string | undefined
+  update?: Update<T> | undefined
 }
 
 /**
  * @param config
  */
 export function sub<T>(config: SubConfig<T> = {}) {
-  const conf = {...config}
+  const conf: SubConfig<T> = {...config}
   return (target: any, key: string) => {
 
     if (!conf.name) conf.name = key
-    let value
+    let value: any
 
     let subscribed = false
 
@@ -32,7 +32,7 @@ export function sub<T>(config: SubConfig<T> = {}) {
           } else {
             up = v => value = v
           }
-          subscriber(this).request<T>(conf.name, up)
+          if (conf.name != null) {subscriber(this).request<T>(conf.name, up)}
           subscribed = true
         }
         if (isGet) {
@@ -54,9 +54,9 @@ export function sub<T>(config: SubConfig<T> = {}) {
 }
 
 export class PubConfig<T> {
-  name?: string
-  initialValue?: T
-  pubTarget?: HTMLElement | ShadowRoot
+  name?: string | undefined
+  initialValue?: T | undefined
+  pubTarget?: HTMLElement | ShadowRoot | undefined
 }
 
 export function pub<T>(config: PubConfig<T> = {}) {
@@ -65,11 +65,11 @@ export function pub<T>(config: PubConfig<T> = {}) {
 
     if (!conf.name) conf.name = key
     let publication: Publication<T>
-    let value: T = conf.initialValue
+    let value: T | undefined | null = conf.initialValue
 
     function init(isGet: boolean) {
 
-      return function accessor(newVal?: T): T | void {
+      return function accessor(newVal?: T): T | null | void {
 
         if (!publication) {
           if (conf.pubTarget) {
