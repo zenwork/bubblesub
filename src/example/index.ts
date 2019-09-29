@@ -1,5 +1,5 @@
 export * from './di'
-export * from './progress'
+export * from './progress/index'
 export * from './streaming'
 export * from './service'
 export { TodoList } from './service/TodoList'

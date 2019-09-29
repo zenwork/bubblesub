@@ -64,14 +64,4 @@ export class PriceStreamer {
 
 }
 
-export class Prices extends HTMLElement {
-  priceStreamer: PriceStreamer
-
-  constructor() {
-    super()
-    console.log('start')
-    this.priceStreamer = new PriceStreamer()
-  }
-}
-
-customElements.define('ex-prices', Prices)
+new PriceStreamer()

@@ -1,6 +1,6 @@
 import { publisher } from '../../publisher'
 
-export { CounterExample } from './CounterExample'
+export { CounterView } from './CounterView'
 
 export interface SequenceService {
   next(): number
@@ -16,12 +16,4 @@ class CounterService implements SequenceService {
 
 }
 
-export class ServiceContext extends HTMLElement {
-  constructor() {
-    super()
-    publisher(document.body).create('service.counter', new CounterService())
-
-  }
-}
-
-customElements.define('ex-service', ServiceContext)
+publisher(document.body).create('service.counter', new CounterService())

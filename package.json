@@ -16,12 +16,11 @@
         "serve"      : "es-dev-server -c es-dev-server.config.js -w",
         "build.watch": "watch \"yarn build\" src",
         "build"      : "pika build && tsc --emitDeclarationOnly --declaration ",
-        "prepare"    : "yarn lint && yarn build && yarn unit-test",
+        "clean"      : "rm -rf ./pkg",
+        "prepare"    : "yarn clean && yarn lint && yarn build && yarn minify",
         "lint"       : "tslint -c tslint.json 'src/**/*.ts'",
-        "_test"      : "testcafe \"chrome:headless\" test/",
-        "_test.watch": "testcafe --live \"chrome:headless\" test/",
-        "test"  : "jest",
-        "types"      : " tsc --emitDeclarationOnly --declaration"
+        "test"       : "jest",
+        "minify"     : "terser --source-map includeSources pkg/dist-web/index.js -o pkg/dist-web/index.min.js; terser --source-map includeSources pkg/dist-node/index.js -o pkg/dist-node/index.min.js"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.5.5",
@@ -37,16 +36,13 @@
         "es-dev-server"                          : "^1.17.2",
         "jest"                                   : "^24.9.0",
         "jest-puppeteer"                         : "^4.3.0",
+        "pika-plugin-minify"                     : "^0.1.0",
         "puppeteer"                              : "^1.20.0",
+        "terser"                                 : "^4.3.4",
         "tslint"                                 : "^5.19.0",
         "typescript"                             : "^3.6.0",
         "watch"                                  : "^1.0.2"
     },
-    "files"          : [
-        "lib",
-        "examples",
-        "README.md"
-    ],
     "@pika/pack"     : {
         "pipeline": [
             [
@@ -68,7 +64,7 @@
             ]
         ]
     },
-    "jest": {
+    "jest"           : {
         "preset": "jest-puppeteer"
     }
 }
