@@ -1,6 +1,6 @@
 {
     "name"           : "bubblesub",
-    "version"        : "1.1.0",
+    "version"        : "1.0.2",
     "description"    : "Observables based on DOM events",
     "repository"     : "https://github.com/zenwork/bubblesub.git",
     "author"         : "Florian Hehlen <florian@hehlen.name>",
@@ -20,7 +20,8 @@
         "prepare"    : "yarn clean && yarn lint && yarn build && yarn minify",
         "lint"       : "tslint -c tslint.json 'src/**/*.ts'",
         "test"       : "jest",
-        "minify"     : "terser --source-map includeSources pkg/dist-web/index.js -o pkg/dist-web/index.min.js; terser --source-map includeSources pkg/dist-node/index.js -o pkg/dist-node/index.min.js"
+        "minify"     : "terser --source-map includeSources pkg/dist-web/index.js -o pkg/dist-web/index.min.js; terser --source-map includeSources pkg/dist-node/index.js -o pkg/dist-node/index.min.js",
+        "version"    : "npm run build"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.5.5",
