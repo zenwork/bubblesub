@@ -1,6 +1,5 @@
+import { initLit, Query } from '../index.test.js'
 import { CounterService, CounterView } from './index.js'
-
-console.log('loading')
 
 describe('fibonacci counter', () => {
 
@@ -17,59 +16,49 @@ describe('fibonacci counter', () => {
 
   describe('wc', () => {
     let wc: CounterView
-    let container: Element | null
+    let value: Query
+    let button: Query
+    let wrapper: any
 
     beforeEach(async () => {
-      // Use createElement to test it is registered correctly
-      wc = (document.createElement('counter-view') as CounterView)
+      wc = await initLit('counter-view', '#container')
+      value = new Query(wc, 'span')
+      button = new Query(wc, 'input')
+      wrapper = {
+          wc,
+          value: async () => {
+            await value.query()
+          },
+          button: async () => {
+            await button.query().click()
+            await wc.updateComplete
 
-      // Connect to DOM in case there's any `connectedCallback` logic
-      container = document.body.querySelector('#container')
-      container.innerHTML = null
-      container.appendChild(wc)
-
-      // Wait for initial render
-      await wc.updateComplete
-
+          },
+          await: async () => {
+            return await wc.updateComplete
+          }
+        }
     })
 
-    function value(): HTMLSpanElement {
-      return wc.shadowRoot.querySelector('span')
-    }
-
-    function button(): HTMLInputElement {
-      return wc.shadowRoot.querySelector('input')
-    }
-
     it('should show next number when button pressed', async () => {
+      await wrapper.await()
+      chai.expect(value.query().textContent).to.equal('0')
+      await button.query().click()
       await wc.updateComplete
-      chai.expect(value().textContent).to.equal('0')
-      button().click()
-      await wc.updateComplete
-      chai.expect(value().textContent).to.equal('1')
-      button().click()
-      await wc.updateComplete
-      chai.expect(value().textContent).to.equal('1')
-      button().click()
-      await wc.updateComplete
-      chai.expect(value().textContent).to.equal('2')
-      button().click()
-      await wc.updateComplete
-      button().click()
-      await wc.updateComplete
-      button().click()
-      await wc.updateComplete
-      button().click()
-      await wc.updateComplete
-      button().click()
-      await wc.updateComplete
-      button().click()
-      await wc.updateComplete
-      button().click()
-      await wc.updateComplete
-      button().click()
-      await wc.updateComplete
-      chai.expect(value().textContent).to.equal('89')
+      chai.expect(value.query().textContent).to.equal('1')
+      await wrapper.button()
+      chai.expect(value.query().textContent).to.equal('1')
+      await wrapper.button()
+      chai.expect(value.query().textContent).to.equal('2')
+      await wrapper.button()
+      await wrapper.button()
+      await wrapper.button()
+      await wrapper.button()
+      await wrapper.button()
+      await wrapper.button()
+      await wrapper.button()
+      await wrapper.button()
+      chai.expect(value.query().textContent).to.equal('89')
     })
 
   })
