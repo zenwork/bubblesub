@@ -1,32 +1,25 @@
+import { customElement, html, LitElement, property } from 'lit-element'
+import { sub } from '../../decorators.js'
 import { subscriber } from '../../subscriber.js'
 import { SequenceService } from './index.js'
 
-export class CounterView extends HTMLElement {
+@customElement('counter-view')
+export class CounterView extends LitElement {
 
-  service: SequenceService
+  @property({attribute: false})
+  private counter: number = 0
 
-  connectedCallback(): void {
-    subscriber(this)
-      .request('service.counter', (srv: SequenceService) => this.service = srv)
-    this.render()
+  @sub({name: 'service.counter'})
+  private service: SequenceService
+
+  protected render() {
+    return html`
+            <input type="button" value="+" id="button" @click="${this.increment}"/>
+            <h2>Next Fibonacci: <span id="value">${this.counter}</span></h2>`
   }
 
-  private render() {
-    this.innerHTML = '<input type="button" value="+" class="b"></button><h2>Counter: <span class="value">n/a</span></h2>'
-    this.bindButton()
-  }
-
-  private bindButton() {
-    const b: HTMLButtonElement = this.querySelector('.b')
-    b.onclick = () => {
-      this.update(this.service.next())
-    }
-  }
-
-  private update(value: number) {
-    this.querySelector('.value').innerHTML = `${value}`
+  private increment() {
+    this.counter = this.service.next()
   }
 
 }
-
-customElements.define('counter-view', CounterView)
