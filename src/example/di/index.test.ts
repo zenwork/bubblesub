@@ -1,7 +1,7 @@
-import { initLit, Query } from '../index.test.js'
+import { initLit, Query } from '../util.js'
 import { CounterService, CounterView } from './index.js'
 
-describe('fibonacci counter', () => {
+describe('fibonacci counter(di) example', () => {
 
   describe('service', () => {
     it('should increment the sequence when next() called', async () => {
