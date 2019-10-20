@@ -2,8 +2,20 @@ import { CounterService, CounterView } from './index.js'
 
 console.log('loading')
 
-describe('wc', () => {
-  describe('content', () => {
+describe('fibonacci counter', () => {
+
+  describe('service', () => {
+    it('should increment the sequence when next() called', async () => {
+      const counterService = new CounterService()
+      chai.expect(counterService.next()).to.equal(1)
+      chai.expect(counterService.next()).to.equal(1)
+      chai.expect(counterService.next()).to.equal(2)
+      chai.expect(counterService.next()).to.equal(3)
+      chai.expect(counterService.next()).to.equal(5)
+    })
+  })
+
+  describe('wc', () => {
     let wc: CounterView
     let container: Element | null
 
@@ -29,16 +41,7 @@ describe('wc', () => {
       return wc.shadowRoot.querySelector('input')
     }
 
-    it('test service', async () => {
-      const counterService = new CounterService()
-      chai.expect(counterService.next()).to.equal(1)
-      chai.expect(counterService.next()).to.equal(1)
-      chai.expect(counterService.next()).to.equal(2)
-      chai.expect(counterService.next()).to.equal(3)
-      chai.expect(counterService.next()).to.equal(5)
-    })
-
-    it('test wc', async () => {
+    it('should show next number when button pressed', async () => {
       await wc.updateComplete
       chai.expect(value().textContent).to.equal('0')
       button().click()
@@ -52,7 +55,21 @@ describe('wc', () => {
       chai.expect(value().textContent).to.equal('2')
       button().click()
       await wc.updateComplete
-      chai.expect(value().textContent).to.equal('3')
+      button().click()
+      await wc.updateComplete
+      button().click()
+      await wc.updateComplete
+      button().click()
+      await wc.updateComplete
+      button().click()
+      await wc.updateComplete
+      button().click()
+      await wc.updateComplete
+      button().click()
+      await wc.updateComplete
+      button().click()
+      await wc.updateComplete
+      chai.expect(value().textContent).to.equal('89')
     })
 
   })
