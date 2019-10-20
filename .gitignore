@@ -64,3 +64,4 @@ dist/
 /examples/
 /lib/
 pkg/
+.serve

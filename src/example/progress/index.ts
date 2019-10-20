@@ -1,7 +1,7 @@
-import { publisher } from '../../publisher'
-import { service } from './FileService'
-export { ProgressDialog } from './ProgressDialog'
-export { ProgressBar } from './ProgressBar'
+import { publisher } from '../../publisher.js'
+import { service } from './FileService.js'
+export { ProgressDialog } from './ProgressDialog.js'
+export { ProgressBar } from './ProgressBar.js'
 
 export class FileServiceComponent extends HTMLElement {
 

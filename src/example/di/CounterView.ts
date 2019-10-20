@@ -1,5 +1,5 @@
-import { subscriber } from '../../subscriber'
-import { SequenceService } from './index'
+import { subscriber } from '../../subscriber.js'
+import { SequenceService } from './index.js'
 
 export class CounterView extends HTMLElement {
 

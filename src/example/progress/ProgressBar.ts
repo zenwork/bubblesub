@@ -1,4 +1,4 @@
-import { subscriber } from '../../subscriber'
+import { subscriber } from '../../subscriber.js'
 
 export class ProgressBar extends HTMLElement {
   factor = Math.random() * 2

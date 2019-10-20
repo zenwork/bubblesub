@@ -1,7 +1,7 @@
 export interface FileService {
   getName(): string
   getSize(): number
-  download(status: (percent: number) => void)
+  download(status: (percent: number) => void): void
 }
 
 class FileServiceImpl implements FileService {

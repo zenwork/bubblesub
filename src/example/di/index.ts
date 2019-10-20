@@ -1,6 +1,6 @@
-import { publisher } from '../../publisher'
+import { publisher } from '../../publisher.js'
 
-export { CounterView } from './CounterView'
+export { CounterView } from './CounterView.js'
 
 export interface SequenceService {
   next(): number

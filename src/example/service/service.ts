@@ -7,17 +7,17 @@ export interface Todo {
 export type Selection = (index: number, value: Todo) => void
 
 export interface Service {
-  select(id: number)
+  select(id: number): void
 
-  subscribe(callback: Selection)
+  subscribe(callback: Selection): void
 
-  add(todo: Todo)
+  add(todo: Todo): void
 
   get(id: number): Todo
 
   getAll(): Map<number, Todo>
 
-  remove(id: number)
+  remove(id: number): void
 
 }
 

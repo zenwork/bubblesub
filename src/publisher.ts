@@ -1,4 +1,4 @@
-import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber'
+import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber.js'
 
 export function publisher(parent: HTMLElement | ShadowRoot) {
   /**

@@ -1,5 +1,5 @@
-import { pub } from '../../decorators'
-import { Service, TodoService } from './service'
+import { pub } from '../../decorators.js'
+import { Service, TodoService } from './service.js'
 
 export class TodoApp extends HTMLElement {
 
