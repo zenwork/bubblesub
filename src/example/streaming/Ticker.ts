@@ -1,4 +1,4 @@
-import { sub } from '../../decorators'
+import { sub } from '../../decorators.js'
 
 export class Ticker extends HTMLElement {
 

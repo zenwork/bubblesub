@@ -1,4 +1,4 @@
-import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber'
+import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber.js'
 
 export function publisher(parent: HTMLElement | ShadowRoot) {
   /**
@@ -14,7 +14,7 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
       const requestListener = (event: CustomEvent) => {
         const request: PublicationRequest<T> = event.detail
         if (request.name === publication.name) {
-          console.debug(`PROVISION: ${publication.name}`)
+          // console.debug(`PROVISION: ${publication.name}`)
           // provide publication to requester
           request.pub = publication
           // stop propagation because only one publisher exists for each publication
@@ -23,7 +23,7 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
       }
       // @ts-ignore
       parent.addEventListener(PUB_REQUEST_EVENT_NAME, requestListener)
-      console.debug(`SETUP PUB: ${name}`)
+      // console.debug(`SETUP PUB: ${name}`)
       return publication
     }
   }

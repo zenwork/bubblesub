@@ -1,5 +1,5 @@
-import { sub } from '../../decorators'
-import { Service, Todo } from './service'
+import { sub } from '../../decorators.js'
+import { Service, Todo } from './service.js'
 
 export class TodoList extends HTMLElement {
 

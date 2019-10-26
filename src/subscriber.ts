@@ -1,4 +1,4 @@
-import { Publication } from './publisher'
+import { Publication } from './publisher.js'
 export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest'
 
 export function subscriber(parent: HTMLElement | ShadowRoot) {
@@ -11,7 +11,7 @@ export function subscriber(parent: HTMLElement | ShadowRoot) {
   return {
     request: function request<T>(name: string, update: Update<T>, retry: boolean = true) {
       const publication = new PublicationRequest<T>(name)
-      console.debug('SETUP SUB: ' + publication.name)
+      // console.debug('SETUP SUB: ' + publication.name)
 
       // seek a parent that provides this publication
       const event = new CustomEvent(
@@ -31,7 +31,7 @@ export function subscriber(parent: HTMLElement | ShadowRoot) {
       function tryIt(timeout: number) {
         if (publication.value == null) {
           setTimeout(() => {
-            console.debug('RETRY SUB: ' + publication.name)
+            // console.debug('RETRY SUB: ' + publication.name)
             parent.dispatchEvent(event)
             if (retry) tryIt((timeout * 5))
           }, timeout)

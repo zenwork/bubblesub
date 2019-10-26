@@ -1,6 +1,6 @@
-import { Publication, publisher } from '../../publisher'
-import { subscriber } from '../../subscriber'
-import { FileService } from './FileService'
+import { Publication, publisher } from '../../publisher.js'
+import { subscriber } from '../../subscriber.js'
+import { FileService } from './FileService.js'
 
 export class ProgressDialog extends HTMLElement {
 

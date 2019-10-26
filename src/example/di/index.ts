@@ -1,19 +1,37 @@
-import { publisher } from '../../publisher'
+import { publisher } from '../../publisher.js'
 
-export { CounterView } from './CounterView'
+export { CounterView } from './CounterView.js'
 
 export interface SequenceService {
   next(): number
 }
 
-class CounterService implements SequenceService {
-  private latest: number = 0
+export class CounterService implements SequenceService {
+  private latest: number = 1
+  private sequence = fib()
 
   next(): number {
-    this.latest = this.latest + 1
-    return this.latest
+    // @ts-ignore
+    return this.sequence.next().value
   }
 
+}
+
+function* fib() {
+  let a: number
+  let b: number
+  let current = a = b = 1
+
+  yield 1
+
+  while (true) {
+    current = b
+
+    yield current
+
+    b = a + b
+    a = current
+  }
 }
 
 publisher(document.body).create('service.counter', new CounterService())

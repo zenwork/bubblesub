@@ -1,8 +1,8 @@
-import { TodoApp } from './TodoApp'
-import { TodoDetails } from './TodoDetails'
-import { TodoList } from './TodoList'
-import { TodoStatus } from './TodoStatus'
-import { TodoSummary } from './TodoSummary'
+import { TodoApp } from './TodoApp.js'
+import { TodoDetails } from './TodoDetails.js'
+import { TodoList } from './TodoList.js'
+import { TodoStatus } from './TodoStatus.js'
+import { TodoSummary } from './TodoSummary.js'
 
 customElements.define('todo-app', TodoApp)
 customElements.define('todo-list', TodoList)

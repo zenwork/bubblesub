@@ -1,6 +1,6 @@
-import { pub } from '../../decorators'
+import { pub } from '../../decorators.js'
 
-export { Ticker } from './Ticker'
+export { Ticker } from './Ticker.js'
 
 // random integer generator
 function getRandomInt(x: number, y: number) {
@@ -41,7 +41,7 @@ export class PriceStreamer {
     this.updatePrice('oranges')
   }
 
-  updatePrice(name) {
+  updatePrice(name: string) {
     const speed = getRandomInt(200, 1000)
     console.debug(`NEW publishing prices for ${name} every ${speed} millis`)
     generator(300, speed,
