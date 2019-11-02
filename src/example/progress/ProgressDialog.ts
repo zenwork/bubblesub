@@ -1,5 +1,5 @@
 import { Publication, publisher } from '../../publisher.js'
-import { subscriber } from '../../subscriber.js'
+import { subscribe } from '../../subscribe.js'
 import { FileService } from './FileService.js'
 
 export class ProgressDialog extends HTMLElement {
@@ -23,7 +23,7 @@ export class ProgressDialog extends HTMLElement {
 
   connectedCallback() {
 
-    subscriber(this).request(
+    subscribe(this).request(
       'file-service',
       (srv: FileService) => {
 

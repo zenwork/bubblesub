@@ -1,6 +1,6 @@
 import { customElement, html, LitElement, property } from 'lit-element'
 import { sub } from '../../decorators.js'
-import { subscriber } from '../../subscriber.js'
+import { subscribe } from '../../subscribe.js'
 import { SequenceService } from './index.js'
 
 @customElement('counter-view')

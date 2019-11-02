@@ -1,5 +1,5 @@
 import { Publication, publisher } from './publisher.js'
-import { subscriber, Update } from './subscriber.js'
+import { subscribe, Update } from './subscribe.js'
 
 export class SubConfig<T> {
   name?: string | undefined
@@ -32,7 +32,7 @@ export function sub<T>(config: SubConfig<T> = {}) {
           } else {
             up = (v: any) => value = v
           }
-          if (conf.name != null) {subscriber(this).request<T>(conf.name, up)}
+          if (conf.name != null) {subscribe(this).request<T>(conf.name, up)}
           subscribed = true
         }
         if (isGet) {

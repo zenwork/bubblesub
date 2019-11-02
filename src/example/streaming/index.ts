@@ -31,7 +31,7 @@ export const config = {initialValue: 0, pubTarget: document.body}
 export class PriceStreamer {
 
   @pub({initialValue: null, pubTarget: document.body})
-  priceStream: { name: string, price: number }
+  prices: { name: string, price: number }
 
   constructor() {
     this.updatePrice('apples')
@@ -44,10 +44,10 @@ export class PriceStreamer {
   updatePrice(name: string) {
     const speed = getRandomInt(200, 1000)
     console.debug(`NEW publishing prices for ${name} every ${speed} millis`)
-    generator(300, speed,
+    generator(30, speed,
       value => {
         // this[name] = value
-        this.priceStream = {name, price: value}
+        this.prices = {name, price: value}
       })
   }
 

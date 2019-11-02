@@ -1,4 +1,4 @@
-import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber.js'
+import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscribe.js'
 
 export function publisher(parent: HTMLElement | ShadowRoot) {
   /**
@@ -36,9 +36,13 @@ export class Publication<T> {
 
   readonly name: string
   private subscriptions = new Array<Update<T>>()
-  private publishedValue: T | null | undefined
+  private firstSubscriptions = new Array<Update<T>>()
+  private lastSubscriptions = new Array<Update<T>>()
+  private publishedValue?: T
+  private firstPublishedValue?: T = null
+  private closed = false
 
-  constructor(name: string, value: T | null) {
+  constructor(name: string, value?: T) {
     this.name = name
     this.publishedValue = value
   }
@@ -47,12 +51,35 @@ export class Publication<T> {
     return this.publishedValue
   }
 
-  update(value: T | null | undefined) {
+  close() {
+    this.closed = true
+    this.lastSubscriptions.forEach((sub) => sub(this.publishedValue))
+  }
+
+  update(value?: T) {
+    if (!this.firstPublishedValue) {
+      this.firstSubscriptions.forEach((updateFunction) => updateFunction(value))
+      this.firstPublishedValue = value
+    }
     this.publishedValue = value
-    this.subscriptions.forEach((val) => val(this.value))
+    this.subscriptions.forEach((updateFunction) => updateFunction(value))
   }
 
   subscribe(fn: Update<T>) {
     this.subscriptions.push(fn)
+  }
+
+  subscribeForFirst(fn: Update<T>) {
+    this.firstSubscriptions.push(fn)
+    if (this.firstPublishedValue) {
+      setTimeout(() => {fn(this.firstPublishedValue)}, 0)
+    }
+  }
+
+  subscribeForLast(fn: Update<T>) {
+    this.lastSubscriptions.push(fn)
+    if (this.closed) {
+      setTimeout(() => {fn(this.publishedValue)}, 0)
+    }
   }
 }
