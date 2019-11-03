@@ -8,7 +8,7 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
    * @param parent
    */
   return {
-    create: function createPublication<T>(name: string, initialValue: T | null): Publication<T> {
+    create: function createPublication<T>(name: string, initialValue?: T | null | undefined): Publication<T> {
       const publication = new Publication<T>(name, initialValue)
 
       const requestListener = (event: CustomEvent) => {
@@ -38,48 +38,74 @@ export class Publication<T> {
   private subscriptions = new Array<Update<T>>()
   private firstSubscriptions = new Array<Update<T>>()
   private lastSubscriptions = new Array<Update<T>>()
-  private publishedValue?: T
-  private firstPublishedValue?: T = null
+  private publishedValues: T[] = new Array<T>()
   private closed = false
 
-  constructor(name: string, value?: T) {
+  constructor(name: string, value: T = null) {
     this.name = name
-    this.publishedValue = value
+    if (value !== null) { this.publishedValues.push(value)}
   }
 
-  get value(): T | undefined | null {
-    return this.publishedValue
+  get value(): T | null {
+    return this.last
+  }
+
+  get length() {
+    return this.publishedValues.length
+  }
+
+  get first(): T | null {
+    if (this.length > 0) {
+      return this.publishedValues[0]
+    } else {
+      return null
+    }
+  }
+
+  get last(): T | null {
+    if (this.length > 0) {
+      return this.publishedValues[this.length - 1]
+    } else {
+      return null
+    }
   }
 
   close() {
     this.closed = true
-    this.lastSubscriptions.forEach((sub) => sub(this.publishedValue))
+    this.lastSubscriptions.forEach((sub) => sub(this.last))
   }
 
-  update(value?: T) {
-    if (!this.firstPublishedValue) {
+  update(value: T) {
+    if (this.length === 0) {
       this.firstSubscriptions.forEach((updateFunction) => updateFunction(value))
-      this.firstPublishedValue = value
     }
-    this.publishedValue = value
+    this.publishedValues.push(value)
     this.subscriptions.forEach((updateFunction) => updateFunction(value))
   }
 
   subscribe(fn: Update<T>) {
     this.subscriptions.push(fn)
+    if (this.length > 0) {
+      setTimeout(() => {this.publishedValues.forEach((v) => fn(v))}, 0)
+    }
   }
 
   subscribeForFirst(fn: Update<T>) {
     this.firstSubscriptions.push(fn)
-    if (this.firstPublishedValue) {
-      setTimeout(() => {fn(this.firstPublishedValue)}, 0)
+    if (this.first) {
+      setTimeout(() => {fn(this.first)}, 0)
     }
   }
 
   subscribeForLast(fn: Update<T>) {
     this.lastSubscriptions.push(fn)
     if (this.closed) {
-      setTimeout(() => {fn(this.publishedValue)}, 0)
+      setTimeout(() => {fn(this.last)}, 0)
     }
+  }
+
+  printAll() {
+    this.publishedValues.forEach((p: T, i: number) => {console.log(`${i}: ${JSON.stringify(p)}`)})
+    console.log()
   }
 }

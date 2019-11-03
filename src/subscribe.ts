@@ -34,7 +34,11 @@ export function subscribe(parent: HTMLElement | ShadowRoot) {
  */
 export class PublicationRequest<T> {
   readonly name: string
-  pub?: Publication<T>
+  private _pub?: Publication<T>
+
+  private subscriptions = new Array<Update<T>>()
+  private firstSubscriptions = new Array<Update<T>>()
+  private lastSubscriptions = new Array<Update<T>>()
 
   constructor(name: string) {
     this.name = name
@@ -44,16 +48,45 @@ export class PublicationRequest<T> {
     return this.pub ? this.pub.value : null
   }
 
+  get pub() {return this._pub}
+
+  set pub(pub: Publication<T>) {
+    if (!this._pub) {
+      this.subscriptions.forEach((u) => pub.subscribe(u))
+      this.subscriptions.length = 0
+
+      this.firstSubscriptions.forEach((u) => pub.subscribeForFirst(u))
+      this.firstSubscriptions.length = 0
+
+      this.lastSubscriptions.forEach((u) => pub.subscribeForLast(u))
+      this.lastSubscriptions.length = 0
+    }
+
+    this._pub = pub
+  }
+
   subscribe(update: Update<T>) {
-    if (this.pub) this.pub.subscribe(update)
+    if (this.pub) {
+      this.pub.subscribe(update)
+    } else {
+      this.subscriptions.push(update)
+    }
   }
 
   subscribeForFirst(fn: Update<T>) {
-    if (this.pub) this.pub.subscribeForFirst(fn)
+    if (this.pub) {
+      this.pub.subscribeForFirst(fn)
+    } else {
+      this.lastSubscriptions.push(fn)
+    }
   }
 
   subscribeForLast(fn: Update<T>) {
-     if (this.pub) this.pub.subscribeForLast(fn)
+    if (this.pub) {
+      this.pub.subscribeForLast(fn)
+    } else {
+      this.firstSubscriptions.push(fn)
+    }
   }
 }
 
