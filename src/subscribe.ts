@@ -85,7 +85,7 @@ export class PublicationRequest<T> {
     if (this.pub) {
       this.pub.subscribeForLast(fn)
     } else {
-      this.firstSubscriptions.push(fn)
+      this.lastSubscriptions.push(fn)
     }
   }
 }

@@ -1,6 +1,6 @@
 // random integer generator
 import { pub } from '../../decorators.js'
-import { publisher } from '../../publisher.js'
+import { Publication, publisher } from '../../publisher.js'
 
 function getRandomInt(x: number, y: number) {
   return Math.floor(Math.random() * ((y - x) + 1) + x)
@@ -9,13 +9,14 @@ function getRandomInt(x: number, y: number) {
 // Start price streams
 export class PriceSource {
 
-  @pub({pubTarget: document.body})
-  prices: { name: string, price: number }
-
   closed: boolean = false
+  counter: number = 0
+  publication: Publication<{ name: string, price: number }>
 
   constructor(prices?: Array<{ price: number; name: string } | { price: number; name: string }>,
               interval?: number) {
+    this.publication = publisher(document.body).create<{ price: number; name: string }>('prices')
+
     if (!prices) {
       this.updatePrice('apples', interval)
       this.updatePrice('bananas', interval)
@@ -23,13 +24,14 @@ export class PriceSource {
       this.updatePrice('kiwi', interval)
       this.updatePrice('oranges', interval)
     } else {
-      const publication = publisher(document.body).create<{ price: number; name: string }>('prices')
+
       setTimeout(() => {
-        prices.forEach((p) => {publication.update(p)})
-        publication.printAll()
-        publication.close()
+        prices.forEach((p) => {this.publication.update(p)})
+        this.publication.close()
       }, 0)
     }
+
+    this.checkDone()
   }
 
   updatePrice(name: string, interval?: number) {
@@ -37,13 +39,21 @@ export class PriceSource {
     console.debug(`NEW publishing prices for ${name} every ${interval} millis`)
     this.generator(30, interval,
       value => {
-        // this[name] = value
-        this.prices = {name, price: value}
+        this.publication.update({name, price: value})
       })
   }
 
   close() {
     this.closed = true
+    this.publication.close()
+  }
+
+  private checkDone() {
+    setTimeout(() => {
+
+      if (this.counter === 150) this.close()
+      this.checkDone()
+    }, 100)
   }
 
   // random price stream generator
@@ -57,6 +67,7 @@ export class PriceSource {
       setTimeout(() => {
         const value = getRandomInt(0, 1000)
         callback(value)
+        this.counter++
         if (remaining > 0) this.getNextPrice(remaining, speed, callback)
       }, speed)
     }

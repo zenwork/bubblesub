@@ -21,15 +21,19 @@ export class Ticker extends LitElement {
   @property()
   last: Tick
 
+  @property()
+  counter: number
+
   constructor() {
     super()
     this.prices = new Array<Tick>()
     this.applePrices = new Array<number>()
+    this.counter = 0
 
     subscribe(this)
       .to<Tick>('prices')
       .map((tick: Tick) => {
-        // console.log(tick)
+        this.counter++
         if (this.prices.filter((t: Tick) => t.name === tick.name).length === 1) {
           this.prices
             .map((t: Tick) => {
@@ -37,7 +41,7 @@ export class Ticker extends LitElement {
               return t
             })
         } else {
-          this.prices.push(tick)
+          this.prices.push(this.copy(tick))
         }
 
         if (tick.name === 'apples') this.applePrices.push(tick.price)
@@ -45,10 +49,10 @@ export class Ticker extends LitElement {
 
       })
       .mapFirst((first: Tick) => {
-        this.first = first
+        this.first = this.copy(first)
       })
       .mapLast((last: Tick) => {
-        this.last = last
+        this.last = this.copy(last)
       })
 
   }
@@ -68,6 +72,11 @@ export class Ticker extends LitElement {
             <li id="last">${this.last ? this.last.name : ''}:${this.last ? this.last.price : ''}</li>
         </ul>
         <h2 class="change">apple price change: ${this.applePrices[this.applePrices.length - 1] - this.applePrices[this.applePrices.length - 2]}</h2>
+        <h2 class="change">counter: ${this.counter}</h2>
     `
+  }
+
+  private copy(last: Tick) {
+    return JSON.parse(JSON.stringify(last))
   }
 }
