@@ -18,7 +18,7 @@
         "build:watch"  : "watch \"npm run build:serve\" ./src ./assets",
         "lint"         : "tslint -c tslint.json 'src/**/*.ts'",
         "minify"       : "terser --source-map includeSources pkg/dist-web/index.js -o pkg/dist-web/index.min.js; terser --source-map includeSources pkg/dist-web/index.bundled.js -o pkg/dist-web/index.bundled.min.js",
-        "prepare"      : "npm run build:serve; npm run lint; npm run test",
+        "prepare"      : "npm run build:serve; npm run lint",
         "serve"        : "es-dev-server --config es-dev-server.config.js --root-dir .serve",
         "test"         : "npm run test:headless",
         "test:headless": "mocha-headless-chrome -f http://localhost:8888/assets/test-bundled.html",
