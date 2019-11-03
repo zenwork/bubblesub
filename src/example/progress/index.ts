@@ -1,4 +1,4 @@
-import { publisher } from '../../publisher.js'
+import { publish } from '../../publish.js'
 import { service } from './FileService.js'
 export { ProgressDialog } from './ProgressDialog.js'
 export { ProgressBar } from './ProgressBar.js'
@@ -7,7 +7,7 @@ export class FileServiceComponent extends HTMLElement {
 
   constructor() {
     super()
-    publisher(document.body).create('file-service', service)
+    publish(document.body).create('file-service', service)
 
   }
 }

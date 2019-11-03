@@ -1,7 +1,12 @@
-import { Publication } from './publisher.js'
-export const PUB_REQUEST_EVENT_NAME: string = 'subscribablerequest'
+import { PUB_REQUEST_EVENT_NAME } from './index.js'
+import { PublicationRequest } from './publication.js'
 
-export function subscribe(parent: HTMLElement | ShadowRoot) {
+/**
+ * Subscribe to an observable. In most cases, passing `this` is recommended. The observable provider should be
+ * somewhere up the DOM tree from the provided `child`.
+ * @param descendant `HTMLElelement` or `ShadowRoot` descendant of observable provider
+ */
+export function subscribe(descendant: HTMLElement | ShadowRoot) {
 
   /**
    * Subscribe for changes to a subscibable. The update is called once on subscription to get the initial value.
@@ -11,76 +16,24 @@ export function subscribe(parent: HTMLElement | ShadowRoot) {
    */
 
   return {
-    to: function to<T>(name: string): To<T> { return new To<T>(name, parent)}
+    /**
+     * Identify by name the observable you are interested in. Use `T` generic to define the type of the observable.
+     * @param name unique observable identifier
+     *
+     */
+    to: function to<T>(name: string): To<T> { return new To<T>(name, descendant)}
   }
 
-}
-
-/**
- * Request for publication to subscribe to
- */
-export class PublicationRequest<T> {
-  readonly name: string
-  private internalPublication?: Publication<T>
-  private subscriptions = new Array<Update<T>>()
-  private firstSubscriptions = new Array<Update<T>>()
-  private lastSubscriptions = new Array<Update<T>>()
-
-  constructor(name: string) {
-    this.name = name
-  }
-
-  get value(): T | null | undefined {
-    return this.pub ? this.pub.value : null
-  }
-
-  get pub() {return this.internalPublication}
-
-  set pub(pub: Publication<T>) {
-    if (!this.internalPublication) {
-      this.subscriptions.forEach((u) => pub.subscribe(u))
-      this.subscriptions.length = 0
-
-      this.firstSubscriptions.forEach((u) => pub.subscribeForFirst(u))
-      this.firstSubscriptions.length = 0
-
-      this.lastSubscriptions.forEach((u) => pub.subscribeForLast(u))
-      this.lastSubscriptions.length = 0
-    }
-
-    this.internalPublication = pub
-  }
-
-  subscribe(update: Update<T>) {
-    if (this.pub) {
-      this.pub.subscribe(update)
-    } else {
-      this.subscriptions.push(update)
-    }
-  }
-
-  subscribeForFirst(fn: Update<T>) {
-    if (this.pub) {
-      this.pub.subscribeForFirst(fn)
-    } else {
-      this.lastSubscriptions.push(fn)
-    }
-  }
-
-  subscribeForLast(fn: Update<T>) {
-    if (this.pub) {
-      this.pub.subscribeForLast(fn)
-    } else {
-      this.lastSubscriptions.push(fn)
-    }
-  }
 }
 
 /**
  * Publication update callback
  */
-export type Update<T> = (updated: T | null | undefined) => void
+export type Update<T> = (updated: T | null) => void
 
+/**
+ * Wrapper around subscription interface
+ */
 class To<T> {
   name: string
   target: HTMLElement | ShadowRoot
@@ -90,8 +43,14 @@ class To<T> {
     this.target = target
   }
 
+  /**
+   * Map the values as they are updated. Whether the update is a replacement for a single value or a stream of values
+   * is determined by the
+   * observsable provider.
+   * @param fn {@link Update}
+   */
   map(fn: Update<T>): To<T> {
-    setup(
+    connect(
       this.name,
       true,
       (pub: PublicationRequest<T>) => {
@@ -102,8 +61,13 @@ class To<T> {
     return this
   }
 
+  /**
+   * Map the first update only. Useful if the first update should trigger special processing OR if only a single update
+   * is expected.
+   * @param fn {@link Update}
+   */
   mapFirst(fn: Update<T>): To<T> {
-    setup(
+    connect(
       this.name,
       true,
       (pub: PublicationRequest<T>) => {
@@ -114,8 +78,12 @@ class To<T> {
     return this
   }
 
+  /**
+   *
+   * @param fn {@link Update}
+   */
   mapLast(fn: Update<T>): To<T> {
-    setup(
+    connect(
       this.name,
       true,
       (pub: PublicationRequest<T>) => {
@@ -124,18 +92,33 @@ class To<T> {
       this.target)
     return this
   }
+
+  /**
+   * Map first value as a promise. This is useful to retrieve a service or a singleton.
+   */
+  toPromise(): Promise<T> {
+    return new Promise<T>((resolve) => {
+      this.mapFirst(updated => resolve(updated))
+    })
+  }
 }
 
-function setup<T>(name: string,
-                  retry: boolean,
-                  beginFn: (pub: PublicationRequest<T>) => void,
-                  parent: HTMLElement | ShadowRoot): PublicationRequest<T> {
+/**
+ * Connection strategy that connect observer and observable over events
+ * @param name observable name
+ * @param retry
+ * @param beginFn startup behavior once observable captured
+ * @param descendant
+ */
+function connect<T>(name: string,
+                    retry: boolean,
+                    beginFn: (pub: PublicationRequest<T>) => void,
+                    descendant: HTMLElement | ShadowRoot): PublicationRequest<T> {
 
   const publication = new PublicationRequest<T>(name)
-  // console.debug('SETUP SUB: ' + publication.name)
 
-  // seek a parent that provides this publication
-  const event = new CustomEvent(
+  // create custom event request
+  const requestEvent = new CustomEvent(
     PUB_REQUEST_EVENT_NAME,
     {
       detail: publication,
@@ -144,18 +127,23 @@ function setup<T>(name: string,
       composed: true
     })
 
-  // request the publication
-  parent.dispatchEvent(event)
+  // seek the observable provider somewhere up the DOM
+  descendant.dispatchEvent(requestEvent)
 
-  retryUntilThere(10)
+  retryUntilThere(10, retry)
 
-  function retryUntilThere(timeout: number) {
+  /**
+   * retry reaching observable at intervals. Retries delay grows after each failed attempt
+   * @param initialTimeout initial timeout.
+   * @param shouldRetry try more than once
+   */
+  function retryUntilThere(initialTimeout: number, shouldRetry: boolean) {
+    // check if provider has filled value
     if (publication.value == null) {
       setTimeout(() => {
-        // console.debug('RETRY SUB: ' + publication.name)
-        parent.dispatchEvent(event)
-        if (retry) retryUntilThere((timeout * 5))
-      }, timeout)
+        descendant.dispatchEvent(requestEvent)
+        if (shouldRetry) retryUntilThere((initialTimeout * 5), shouldRetry)
+      }, initialTimeout)
     } else {
       beginFn(publication)
     }

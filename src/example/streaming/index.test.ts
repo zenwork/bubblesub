@@ -1,4 +1,4 @@
-import { initLit, Query } from '../util.js'
+import { initLit, Query } from '../test-util.js'
 import { PriceSource } from './PriceSource.js'
 import { Ticker } from './Ticker.js'
 export { Ticker } from './Ticker.js'

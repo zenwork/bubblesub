@@ -1,4 +1,5 @@
-import { Publication, publisher } from './publisher.js'
+import { Publication } from './publication'
+import { publish } from './publish.js'
 import { subscribe, Update } from './subscribe.js'
 
 export class SubConfig<T> {
@@ -73,9 +74,9 @@ export function pub<T>(config: PubConfig<T> = {}) {
 
         if (!publication) {
           if (conf.pubTarget) {
-            publication = publisher(conf.pubTarget).create<T>(conf.name, conf.initialValue)
+            publication = publish(conf.pubTarget).create<T>(conf.name, conf.initialValue)
           } else {
-            publication = publisher(this).create<T>(conf.name, conf.initialValue)
+            publication = publish(this).create<T>(conf.name, conf.initialValue)
           }
         }
 

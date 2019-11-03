@@ -1,4 +1,4 @@
-import { initLit, Query } from '../util.js'
+import { initLit, Query } from '../test-util.js'
 import { CounterService, CounterView } from './index.js'
 
 describe('fibonacci counter(di) example', () => {

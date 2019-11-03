@@ -1,30 +1,61 @@
-import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscribe.js'
+import { Update } from './subscribe'
 
-export function publisher(parent: HTMLElement | ShadowRoot) {
-  /**
-   * Expose a Subscibable over events
-   * @param name
-   * @param initialValue
-   * @param parent
-   */
-  return {
-    create: function createPublication<T>(name: string, initialValue?: T | null | undefined): Publication<T> {
-      const publication = new Publication<T>(name, initialValue)
+/**
+ * Request for publication to subscribe to
+ */
+export class PublicationRequest<T> {
+  readonly name: string
+  private internalPublication?: Publication<T>
+  private subscriptions = new Array<Update<T>>()
+  private firstSubscriptions = new Array<Update<T>>()
+  private lastSubscriptions = new Array<Update<T>>()
 
-      const requestListener = (event: CustomEvent) => {
-        const request: PublicationRequest<T> = event.detail
-        if (request.name === publication.name) {
-          // console.debug(`PROVISION: ${publication.name}`)
-          // provide publication to requester
-          request.pub = publication
-          // stop propagation because only one publisher exists for each publication
-          event.stopPropagation()
-        }
-      }
-      // @ts-ignore
-      parent.addEventListener(PUB_REQUEST_EVENT_NAME, requestListener)
-      // console.debug(`SETUP PUB: ${name}`)
-      return publication
+  constructor(name: string) {
+    this.name = name
+  }
+
+  get value(): T | null | undefined {
+    return this.pub ? this.pub.value : null
+  }
+
+  get pub() {return this.internalPublication}
+
+  set pub(pub: Publication<T>) {
+    if (!this.internalPublication) {
+      this.subscriptions.forEach((u) => pub.subscribe(u))
+      this.subscriptions.length = 0
+
+      this.firstSubscriptions.forEach((u) => pub.subscribeForFirst(u))
+      this.firstSubscriptions.length = 0
+
+      this.lastSubscriptions.forEach((u) => pub.subscribeForLast(u))
+      this.lastSubscriptions.length = 0
+    }
+
+    this.internalPublication = pub
+  }
+
+  subscribe(update: Update<T>) {
+    if (this.pub) {
+      this.pub.subscribe(update)
+    } else {
+      this.subscriptions.push(update)
+    }
+  }
+
+  subscribeForFirst(fn: Update<T>) {
+    if (this.pub) {
+      this.pub.subscribeForFirst(fn)
+    } else {
+      this.lastSubscriptions.push(fn)
+    }
+  }
+
+  subscribeForLast(fn: Update<T>) {
+    if (this.pub) {
+      this.pub.subscribeForLast(fn)
+    } else {
+      this.lastSubscriptions.push(fn)
     }
   }
 }

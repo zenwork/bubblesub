@@ -1,5 +1,4 @@
-import { Publication } from './publisher.js'
-import { PublicationRequest } from './subscribe.js'
+import { Publication, PublicationRequest } from './publication'
 
 describe('subscriber', function() {
   this.enableTimeouts()
