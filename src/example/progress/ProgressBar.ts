@@ -6,8 +6,8 @@ export class ProgressBar extends HTMLElement {
 
   connectedCallback(): void {
     subscribe(this)
-      .request(
-        'percent',
+      .to<number>('percent')
+      .map(
         (percent: number) => {
           let calc = percent * this.f
 

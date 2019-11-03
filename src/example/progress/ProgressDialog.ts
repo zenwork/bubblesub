@@ -23,9 +23,9 @@ export class ProgressDialog extends HTMLElement {
 
   connectedCallback() {
 
-    subscribe(this).request(
-      'file-service',
-      (srv: FileService) => {
+    subscribe(this)
+      .to<FileService>('file-service')
+      .map((srv: FileService) => {
 
         // set file name and size
         this.root.querySelector('.name').innerHTML = srv.getName()

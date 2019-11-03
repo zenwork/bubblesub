@@ -11,19 +11,6 @@ export function subscribe(parent: HTMLElement | ShadowRoot) {
    */
 
   return {
-    request: function request<T>(name: string, update: Update<T>, retry: boolean = true) {
-
-      function begin(publication: PublicationRequest<T>) {
-        // subscribe for updates
-        publication.subscribe(update)
-
-        // force publish initial value
-        update(publication.value)
-      }
-
-      setup(name, retry, begin, parent)
-
-    },
     to: function to<T>(name: string): To<T> { return new To<T>(name, parent)}
   }
 
@@ -34,8 +21,7 @@ export function subscribe(parent: HTMLElement | ShadowRoot) {
  */
 export class PublicationRequest<T> {
   readonly name: string
-  private _pub?: Publication<T>
-
+  private internalPublication?: Publication<T>
   private subscriptions = new Array<Update<T>>()
   private firstSubscriptions = new Array<Update<T>>()
   private lastSubscriptions = new Array<Update<T>>()
@@ -48,10 +34,10 @@ export class PublicationRequest<T> {
     return this.pub ? this.pub.value : null
   }
 
-  get pub() {return this._pub}
+  get pub() {return this.internalPublication}
 
   set pub(pub: Publication<T>) {
-    if (!this._pub) {
+    if (!this.internalPublication) {
       this.subscriptions.forEach((u) => pub.subscribe(u))
       this.subscriptions.length = 0
 
@@ -62,7 +48,7 @@ export class PublicationRequest<T> {
       this.lastSubscriptions.length = 0
     }
 
-    this._pub = pub
+    this.internalPublication = pub
   }
 
   subscribe(update: Update<T>) {

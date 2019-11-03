@@ -9,17 +9,32 @@ export class CounterView extends LitElement {
   @property({attribute: false})
   private counter: number = 0
 
-  @sub({name: 'service.counter'})
+  @property({attribute: false})
   private service: SequenceService
+
+  constructor() {
+    super()
+    subscribe(this)
+      .to<SequenceService>('service.counter')
+      .mapFirst((s) => {
+        console.log('first')
+        this.service = s
+        const el: HTMLButtonElement = this.shadowRoot.querySelector('#button')
+        el.style.visibility = null
+        this.requestUpdate()
+      })
+  }
 
   protected render() {
     return html`
-            <input type="button" value="+" id="button" @click="${this.increment}"/>
+            <input type="button" value="+" id="button" @click="${this.increment}" style="visibility: hidden"/>
             <h2>Next Fibonacci: <span id="value">${this.counter}</span></h2>`
   }
 
   private increment() {
-    this.counter = this.service.next()
+    setTimeout(() => {
+      this.counter = this.service.next()
+    }, 500)
   }
 
 }

@@ -32,7 +32,7 @@ export function sub<T>(config: SubConfig<T> = {}) {
           } else {
             up = (v: any) => value = v
           }
-          if (conf.name != null) {subscribe(this).request<T>(conf.name, up)}
+          if (conf.name != null) {subscribe(this).to<T>(conf.name).map(up)}
           subscribed = true
         }
         if (isGet) {

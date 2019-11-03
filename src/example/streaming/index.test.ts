@@ -8,14 +8,14 @@ describe('streaming', function() {
   this.timeout(5000)
   this.enableTimeouts()
 
-  describe('wc', () => {
+  describe('wc', function() {
     let service: PriceSource
     let wc: Ticker
     let first: Query
     let last: Query
     let apples: Query
 
-    beforeEach(async () => {
+    beforeEach(async function() {
       wc = await initLit('ex-ticker', '#container')
       await wc.updateComplete
       first = new Query(wc, '#first')
@@ -23,7 +23,7 @@ describe('streaming', function() {
       apples = new Query(wc, '#prices > #apples')
     })
 
-    afterEach(async () => {
+    afterEach(async function() {
       service.close()
       service = null
     })
