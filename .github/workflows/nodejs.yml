@@ -21,6 +21,6 @@ jobs:
       run: |
         npm set audit false
         npm install
-        pika build
+        node_modules/.bin/pika build
       env:
         CI: true
