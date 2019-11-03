@@ -29,4 +29,3 @@ export function publish(parent: HTMLElement | ShadowRoot) {
     }
   }
 }
-

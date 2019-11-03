@@ -63,7 +63,7 @@ subscribe(this)
 
 ```
 
-### Publishing a Service
+### Publishing a service
            
 Publishing a service or a factory is very similar to a stream of values. It's simply not expected that a service or factory is updated more than once.  
 
