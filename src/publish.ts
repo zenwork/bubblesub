@@ -1,6 +1,7 @@
-import { PUB_REQUEST_EVENT_NAME, PublicationRequest, Update } from './subscriber.js'
+import { PUB_REQUEST_EVENT_NAME } from './index.js'
+import { Publication, PublicationRequest } from './publication.js'
 
-export function publisher(parent: HTMLElement | ShadowRoot) {
+export function publish(parent: HTMLElement | ShadowRoot) {
   /**
    * Expose a Subscibable over events
    * @param name
@@ -8,7 +9,7 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
    * @param parent
    */
   return {
-    create: function createPublication<T>(name: string, initialValue: T | null): Publication<T> {
+    create: function createPublication<T>(name: string, initialValue?: T | null | undefined): Publication<T> {
       const publication = new Publication<T>(name, initialValue)
 
       const requestListener = (event: CustomEvent) => {
@@ -26,33 +27,5 @@ export function publisher(parent: HTMLElement | ShadowRoot) {
       // console.debug(`SETUP PUB: ${name}`)
       return publication
     }
-  }
-}
-
-/**
- * A published value
- */
-export class Publication<T> {
-
-  readonly name: string
-  private subscriptions = new Array<Update<T>>()
-  private publishedValue: T | null | undefined
-
-  constructor(name: string, value: T | null) {
-    this.name = name
-    this.publishedValue = value
-  }
-
-  get value(): T | undefined | null {
-    return this.publishedValue
-  }
-
-  update(value: T | null | undefined) {
-    this.publishedValue = value
-    this.subscriptions.forEach((val) => val(this.value))
-  }
-
-  subscribe(fn: Update<T>) {
-    this.subscriptions.push(fn)
   }
 }

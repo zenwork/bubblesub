@@ -2,21 +2,23 @@
 
 ***NOTE: This library is experimental!***
 
-Bubblesub is a simple library to create observables. It leverages the DOM and DOM events to reduce coupling to make things simple and lightweight. 
+Bubblesub is a simple and lightweight library to manage observables. It builds on top of the DOM and event web standards. It's reduces the code needed without introducing a large library. It targets mid-range problems such as:
+* building web components libraries
+* micro frontends
+* create observable contexts that are neither bound to a whole app or to a whole page.  
 
-With it, you can easily implement the following:
-* dependency injection
-* state management
-* data streaming
+Bubblesub is flexible enough to accomplish different types of integrations:
+* share a singleton services or factory
+* share data
+* stream data from a websocket or SSE to multiple listening components
+
+Bubblesub is written in Typescript but useable as a JS or TS dependency. It is published using ES 6 modules
 
 Bubblesub is inspired by a conference talk given by Justin Fagnani (@justinfugnani) who works on Polymer's lit-element and lit-html: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
 
 ## It's Easy
 
-Here is an example on StackBlitz that integrates with [lit-element](https://lit-element.polymer-project.org/) :
-[StackBlitz Example](https://stackblitz.com/edit/bubblesub-demo) 
-
-There are some other examples in this repo that are implemented as standalone Web Components. Finde them [here](src/example).
+There are some examples in this repo that are implemented as standalone Web Components. Finde them [here](src/example).
 
 ## How it works
 
@@ -26,93 +28,74 @@ There are some other examples in this repo that are implemented as standalone We
 * Bubblesub is written in Typescript and is provided with ES module bundling and d.ts files
 * Bubblesub has zero dependencies and targets web component (ie: custom elements, shadow dom) development. 
 
-### Publishing
+### Publishing a Stream of updates
 
-Here is an example of a higher-level component that publishes a calculator as a service. 
-
+Do the following to publish a stream of data or update a single value as it changes 
+ 
+#### publishing
 ```typescript
-import { LitElement, customElement, html } from 'lit-element'
-import { pub } from 'bubblesub'
-import { Calculator } from 'calculator'
+import { Publication } from './publication' 
+import { publish } from './publish'
 
-//Parent calculator component
-@customElement('demo-calculator')
-class App extends LitElement {
+interface Price { name: string, price: number }
+ 
+const pub: Publication<Price> = publish(document.body).create<Price>('prices')
+pub.update({name: 'goog', price: 1273.74})
+pub.update({name: 'fb', price: 193.62})
 
-  @pub()
-  calc: Calculator = new Calculator()
-
-  render() {
-    return html`<h1>Calculator</h1><slot></slot>`;
-  }
-}
+pub.close()
 
 ```
 
-### Subscribing
+#### subscribing
 
-Here is a child element that can be repeated as many times as is needed.
-
+You can subscribe for all updates, just the first, or just the last. The last update is only published if the publication is closed.
 ```typescript
-import { LitElement, customElement, html } from 'lit-element'
-import { sub } from 'bubblesub'
-import { Calculator } from 'calculator'
+import { subscribe } from './subscribe' 
 
-@customElement('demo-val')
-class Value extends LitElement {
+interface Price { name: string, price: number }
 
-  @sub()
-  calc: Calculator
-
-  render() {
-    return html`
-    <input 
-      type="number" 
-      @change="${(e) => { this.calc.set(parseInt(this.id), parseInt(e.target.value)) }}" >
-    </input>`
-  }
-}
+subscribe(this)
+      .to<Price>('prices')
+      .map((price: Price) => { /*do something with all the price*/})
+      .mapFirst((price: Price) => { /*do something with the initial price*/})
+      .mapLast((price: Price) => { /*do something with the final price*/})
 
 ```
 
-Here is a child element that displays the total of the calculation
+### Publishing a service
+           
+Publishing a service or a factory is very similar to a stream of values. It's simply not expected that a service or factory is updated more than once.  
+
+#### publishing
+
+To publish a shared service or factory do the same as with a stream.   
 
 ```typescript
-import { LitElement, customElement, html } from 'lit-element'
-import { sub } from 'bubblesub'
-import { Calculator } from 'calculator'
-  
-@customElement('demo-total')
-class Total extends LitElement {
+import {ServiceImpl, ServiceInterface } from 'my-app' 
+import { publish } from 'bubblesub' 
 
-  @sub({ update: function (calc: Calculator) { calc.onChange(() => { this.requestUpdate() }) } })
-  calc: Calculator
+const pub = publish(document.body).create<ServiceInterface>('service')
+pub.update(new ServiceImpl())
 
-  render() {
-    return html`
-    <input 
-      type="number" 
-      value="${this.calc.total()}" 
-      readonly>
-    </input>`
-  }
-}
 ```
 
-### HTML
+#### subscribing
 
-Here the components are combined. The `demo-val` elements find the calculator service because they have an ancestor, demo-calculator that provides the service.
+To subscribe to a service or factory use async/await with the `.toPromise()` function to resolve the first update. Or you can use the `.mapFirst()` to process the update in a callback.
 
-```html
-  <demo-calculator>
-    <demo-val id="1"></demo-val>
-    +
-    <demo-val id="2"></demo-val>
-    +
-    <demo-val id="3"></demo-val>
-    =
-    <demo-total></demo-total>
-  </demo-calculator>
+```typescript
+import { subscribe } from 'bubblesub' 
+import { ServiceInterface } from 'my-app' 
+
+const service:ServiceInterface = await subscribe(this)
+      .to<ServiceInterface>('service')
+      .toPromise()
+
+subscribe(this)
+      .to<ServiceInterface>('service')
+      .mapFirst((service:ServiceInterface)=>{/* do something with the service*/})
+      
 ```
 
 ## Leveraging the DOM and events
@@ -124,7 +107,11 @@ So...
 * Bubblesub requires that the publisher of a Publication be an ancestor of the subscriber
 * Bubblesub relies on the hierarchical nature of the DOM to bind publisher and subscriber. A subscriber is bound to the closest ancestor that publishes the wanted Publication. 
 * There is no central registry of Publications. This means that your Bubblesub bindings can be encapsulated within a parent component, leak nothing, require nothing from outside.
- 
+* bubblesub does not require that subscribing happen after an observable is published. The subcriber will keep on trying to find the observable assuming it will eventually appear. On the other hand a late subscriber will receive all the updates that the observable has accumulated before the subscription was established.   
+
+## Decorators
+
+see: [experimental decorators](DECORATORS.md)
 
 ## Usage
 
@@ -135,9 +122,13 @@ The only required coupling is on the name of the dependency. Bubblesub is implem
 A set of examples devised for demonstrating and testing is available if you checkout the project and build it. For the sake of clarity the examples are implemented using vanilla JS web components.
 
 ```shell script
-yarn build.example
+## build the library, the tests, and the examples
+yarn build:serve
+
+## serve the built examples
 yarn serve
-## open browser at http://localhost:8080
+
+## open browser at http://localhost:8888
 ```
 
 [Docs on Examples](src/example/README.md)

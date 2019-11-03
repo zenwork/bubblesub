@@ -1,5 +1,6 @@
-import { Publication, publisher } from '../../publisher.js'
-import { subscriber } from '../../subscriber.js'
+import { Publication } from '../../publication'
+import { publish } from '../../publish.js'
+import { subscribe } from '../../subscribe.js'
 import { FileService } from './FileService.js'
 
 export class ProgressDialog extends HTMLElement {
@@ -10,7 +11,7 @@ export class ProgressDialog extends HTMLElement {
   constructor() {
     super()
     this.root = this.attachShadow({mode: 'open'})
-    this.pub = publisher(this.root).create('percent', 0)
+    this.pub = publish(this.root).create('percent', 0)
 
     this.root.innerHTML = `
        <h1>CHUNK DOWNLOAD</h1>
@@ -23,9 +24,9 @@ export class ProgressDialog extends HTMLElement {
 
   connectedCallback() {
 
-    subscriber(this).request(
-      'file-service',
-      (srv: FileService) => {
+    subscribe(this)
+      .to<FileService>('file-service')
+      .map((srv: FileService) => {
 
         // set file name and size
         this.root.querySelector('.name').innerHTML = srv.getName()

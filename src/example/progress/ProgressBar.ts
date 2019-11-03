@@ -1,13 +1,13 @@
-import { subscriber } from '../../subscriber.js'
+import { subscribe } from '../../subscribe.js'
 
 export class ProgressBar extends HTMLElement {
   factor = Math.random() * 2
   f = (this.factor > 2) ? 1 : this.factor
 
   connectedCallback(): void {
-    subscriber(this)
-      .request(
-        'percent',
+    subscribe(this)
+      .to<number>('percent')
+      .map(
         (percent: number) => {
           let calc = percent * this.f
 

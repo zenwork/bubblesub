@@ -41,7 +41,7 @@
         "forin"                   : false,
         "arrow-parens"            : false,
         "only-arrow-functions"    : [
-            true,
+            false,
             "allow-declarations",
             "allow-named-functions"
         ],

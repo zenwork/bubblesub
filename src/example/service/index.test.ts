@@ -3,7 +3,7 @@ import { Todo, TodoService } from './service.js'
 describe('todo example', () => {
   describe('service', () => {
 
-    it('listens to selected', (done) => {
+    it('listens to selected', function(done) {
 
       const service = new TodoService()
       service.add({summary: 'project', details: 'finish project', status: {done: false, due: null}})
@@ -18,7 +18,7 @@ describe('todo example', () => {
 
   })
 
-    it('indexes are maintained', () => {
+    it('indexes are maintained', function() {
 
       const service = new TodoService()
       service.add({summary: 'project', details: 'finish project', status: {done: false, due: null}})
@@ -33,7 +33,7 @@ describe('todo example', () => {
       chai.expect(todo.summary).to.equal('supper')
   })
 
-    it('gets all todoList', () => {
+    it('gets all todoList', function() {
       const service = new TodoService()
       service.add({summary: 'project', details: 'finish project', status: {done: false, due: null}})
       service.add({summary: 'supper', details: 'make green curry', status: {done: false, due: null}})

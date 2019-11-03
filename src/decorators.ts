@@ -1,5 +1,6 @@
-import { Publication, publisher } from './publisher.js'
-import { subscriber, Update } from './subscriber.js'
+import { Publication } from './publication'
+import { publish } from './publish.js'
+import { subscribe, Update } from './subscribe.js'
 
 export class SubConfig<T> {
   name?: string | undefined
@@ -32,7 +33,7 @@ export function sub<T>(config: SubConfig<T> = {}) {
           } else {
             up = (v: any) => value = v
           }
-          if (conf.name != null) {subscriber(this).request<T>(conf.name, up)}
+          if (conf.name != null) {subscribe(this).to<T>(conf.name).map(up)}
           subscribed = true
         }
         if (isGet) {
@@ -73,9 +74,9 @@ export function pub<T>(config: PubConfig<T> = {}) {
 
         if (!publication) {
           if (conf.pubTarget) {
-            publication = publisher(conf.pubTarget).create<T>(conf.name, conf.initialValue)
+            publication = publish(conf.pubTarget).create<T>(conf.name, conf.initialValue)
           } else {
-            publication = publisher(this).create<T>(conf.name, conf.initialValue)
+            publication = publish(this).create<T>(conf.name, conf.initialValue)
           }
         }
 
