@@ -28,9 +28,9 @@ There are some examples in this repo that are implemented as standalone Web Comp
 * Bubblesub is written in Typescript and is provided with ES module bundling and d.ts files
 * Bubblesub has zero dependencies and targets web component (ie: custom elements, shadow dom) development. 
 
-### Publishing a Stream
+### Publishing a Stream of updates
 
-One common case for observable is a stream of data
+Do the following to publish a stream of data or update a single value as it changes 
  
 #### publishing
 ```typescript
@@ -48,6 +48,8 @@ pub.close()
 ```
 
 #### subscribing
+
+You can subscribe for all updates, just the first, or just the last. The last update is only published if the publication is closed.
 ```typescript
 import { subscribe } from './subscribe' 
 
@@ -61,9 +63,13 @@ subscribe(this)
 
 ```
 
-### Publihing a Service
+### Publishing a Service
+           
+Publishing a service or a factory is very similar to a stream of values. It's simply not expected that a service or factory is updated more than once.  
 
 #### publishing
+
+To publish a shared service or factory do the same as with a stream.   
 
 ```typescript
 import {ServiceImpl, ServiceInterface } from 'my-app' 
@@ -75,6 +81,8 @@ pub.update(new ServiceImpl())
 ```
 
 #### subscribing
+
+To subscribe to a service or factory use async/await with the `.toPromise()` function to resolve the first update. Or you can use the `.mapFirst()` to process the update in a callback.
 
 ```typescript
 import { subscribe } from 'bubblesub' 
