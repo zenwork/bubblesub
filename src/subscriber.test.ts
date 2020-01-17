@@ -36,5 +36,26 @@ describe('subscriber', function() {
 
     })
 
+    it('should not have memory of updates when flag is set', function() {
+      let subAll: number
+      let subFirst: number
+      let subLast: number
+
+      const request = new PublicationRequest<number>('test')
+      request.subscribe((up: number) => {subAll = up})
+      request.subscribeForFirst((up: number) => {subFirst = up})
+      request.subscribeForLast((up: number) => {subLast = up})
+
+      request.pub = new Publication<number>('test', 1, false)
+      request.pub.update(2)
+      request.pub.update(3)
+      request.pub.close()
+
+      chai.expect(subFirst).to.equal(3)
+      chai.expect(subAll).to.equal(3)
+      chai.expect(subLast).to.equal(3)
+
+    })
+
   })
 })

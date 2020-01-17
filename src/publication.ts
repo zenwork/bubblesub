@@ -70,11 +70,14 @@ export class Publication<T> {
   private firstSubscriptions = new Array<Update<T>>()
   private lastSubscriptions = new Array<Update<T>>()
   private publishedValues: T[] = new Array<T>()
+  private singleValue: T
   private closed = false
+  private hasMemory: boolean
 
-  constructor(name: string, value: T = null) {
+  constructor(name: string, value: T = null, hasMemory: boolean = true) {
     this.name = name
-    if (value !== null) { this.publishedValues.push(value)}
+    this.hasMemory = hasMemory
+    if (value !== null) { this.hasMemory ? this.publishedValues.push(value) : this.singleValue = value}
   }
 
   get value(): T | null {
@@ -82,12 +85,12 @@ export class Publication<T> {
   }
 
   get length() {
-    return this.publishedValues.length
+    return this.hasMemory ? this.publishedValues.length : 1
   }
 
   get first(): T | null {
     if (this.length > 0) {
-      return this.publishedValues[0]
+      return this.hasMemory ? this.publishedValues[0] : this.singleValue
     } else {
       return null
     }
@@ -95,7 +98,7 @@ export class Publication<T> {
 
   get last(): T | null {
     if (this.length > 0) {
-      return this.publishedValues[this.length - 1]
+      return this.hasMemory ? this.publishedValues[this.length - 1] : this.singleValue
     } else {
       return null
     }
@@ -110,14 +113,14 @@ export class Publication<T> {
     if (this.length === 0) {
       this.firstSubscriptions.forEach((updateFunction) => updateFunction(value))
     }
-    this.publishedValues.push(value)
+    this.hasMemory ? this.publishedValues.push(value) : this.singleValue = value
     this.subscriptions.forEach((updateFunction) => updateFunction(value))
   }
 
   subscribe(fn: Update<T>) {
     this.subscriptions.push(fn)
     if (this.length > 0) {
-      setTimeout(() => {this.publishedValues.forEach((v) => fn(v))}, 0)
+      setTimeout(() => {this.hasMemory ? this.publishedValues.forEach((v) => fn(v)) : fn(this.singleValue)}, 0)
     }
   }
 
@@ -136,7 +139,9 @@ export class Publication<T> {
   }
 
   printAll() {
-    this.publishedValues.forEach((p: T, i: number) => {console.log(`${i}: ${JSON.stringify(p)}`)})
+    this.hasMemory
+      ? this.publishedValues.forEach((p: T, i: number) => {console.log(`${i}: ${JSON.stringify(p)}`)})
+      : console.log(`0: ${JSON.stringify(this.singleValue)}`)
     console.log()
   }
 }
