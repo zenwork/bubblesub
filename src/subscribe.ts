@@ -130,7 +130,7 @@ function connect<T>(name: string,
   // seek the observable provider somewhere up the DOM
   descendant.dispatchEvent(requestEvent)
 
-  retryUntilThere(10, retry)
+  retryUntilThere(5, retry)
 
   /**
    * retry reaching observable at intervals. Retries delay grows after each failed attempt
@@ -142,7 +142,7 @@ function connect<T>(name: string,
     if (publication.value == null) {
       setTimeout(() => {
         descendant.dispatchEvent(requestEvent)
-        if (shouldRetry) retryUntilThere((initialTimeout * 5), shouldRetry)
+        if (shouldRetry) retryUntilThere(initialTimeout < 1000 ? (initialTimeout * 2) : 500, shouldRetry)
       }, initialTimeout)
     } else {
       beginFn(publication)
