@@ -104,7 +104,7 @@ Bubblesub uses DOM events for discovery and binding of publishers and subscriber
 
 So...
 * Bubblesub uses bubbling events in the DOM to link subscribers and publishers
-* Bubblesub requires that the publisher of a Publication be an ancestor of the subscriber
+* Bubblesub requires that the subscriber for a Publication be an ancestor of the publication point. This allows for scoping of your pub/sub relationships. Ultimately though the publisher can publish everything on `documet.body` and make it visible to all. 
 * Bubblesub relies on the hierarchical nature of the DOM to bind publisher and subscriber. A subscriber is bound to the closest ancestor that publishes the wanted Publication. 
 * There is no central registry of Publications. This means that your Bubblesub bindings can be encapsulated within a parent component, leak nothing, require nothing from outside.
 * bubblesub does not require that subscribing happen after an observable is published. The subcriber will keep on trying to find the observable assuming it will eventually appear. On the other hand a late subscriber will receive all the updates that the observable has accumulated before the subscription was established.   
