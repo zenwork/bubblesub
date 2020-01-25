@@ -9,7 +9,7 @@ describe('subscriber', function() {
     it('should register subscriptions', function() {
       let subAll: number
       const request = new PublicationRequest<number>('test')
-      request.pub = new Publication<number>('test')
+      request.pub = new Publication<number>('test', null)
       request.subscribe((up: number) => {subAll = up})
       request.pub.update(999)
 
@@ -26,7 +26,7 @@ describe('subscriber', function() {
       request.subscribeForFirst((up: number) => {subFirst = up})
       request.subscribeForLast((up: number) => {subLast = up})
 
-      request.pub = new Publication<number>('test')
+      request.pub = new Publication<number>('test', null)
       request.pub.update(999)
       request.pub.close()
 

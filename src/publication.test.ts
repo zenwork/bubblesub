@@ -96,5 +96,81 @@ describe('publisher', function() {
         done()
       }, 200)
     })
+
+    it('should not remember past updates when configured to do so', function(done) {
+      const subAllBefore: number[] = new Array<number>()
+      const subFirstBefore: number[] = new Array<number>()
+      const subLastBefore: number[] = new Array<number>()
+
+      const subAll: number[] = new Array<number>()
+      const subFirst: number[] = new Array<number>()
+      const subLast: number[] = new Array<number>()
+
+      const pub = new Publication<number>('test', null, 0)
+      pub.subscribe((update: number) => {subAllBefore.push(update)})
+      pub.subscribeForFirst((update: number) => {subFirstBefore.push(update)})
+      pub.subscribeForLast((update: number) => {subLastBefore.push(update)})
+
+      pub.update(999)
+      pub.update(888)
+      pub.update(777)
+      pub.close()
+
+      pub.subscribe((update: number) => {subAll.push(update)})
+      pub.subscribeForFirst((update: number) => {subFirst.push(update)})
+      pub.subscribeForLast((update: number) => {subLast.push(update)})
+
+      setTimeout(() => {
+        expect(subAll.length).to.eq(0)
+        expect(subFirstBefore.length).to.eq(1)
+        expect(subFirstBefore[0]).to.eq(999)
+        expect(subFirst.length).to.eq(0)
+        expect(subLastBefore.length).to.eq(1)
+        expect(subLastBefore[0]).to.eq(777)
+        expect(subLast.length).to.eq(0)
+        done()
+      }, 300)
+    })
+
+    it('should remember limited number of past updates when configured to do so', function(done) {
+      const subAllBefore: number[] = new Array<number>()
+      const subFirstBefore: number[] = new Array<number>()
+      const subLastBefore: number[] = new Array<number>()
+
+      const subAll: number[] = new Array<number>()
+      const subFirst: number[] = new Array<number>()
+      const subLast: number[] = new Array<number>()
+
+      const pub = new Publication<number>('test', null, 2)
+      pub.subscribe((update: number) => {subAllBefore.push(update)})
+      pub.subscribeForFirst((update: number) => {subFirstBefore.push(update)})
+      pub.subscribeForLast((update: number) => {subLastBefore.push(update)})
+
+      pub.update(999)
+      pub.update(888)
+      pub.update(777)
+      pub.update(666)
+      pub.close()
+
+      pub.subscribe((update: number) => {subAll.push(update)})
+      pub.subscribeForFirst((update: number) => {subFirst.push(update)})
+      pub.subscribeForLast((update: number) => {subLast.push(update)})
+
+      setTimeout(() => {
+        expect(subAllBefore.length).to.equal(4)
+        expect(subFirstBefore.length).to.equal(1)
+        expect(subFirstBefore[0]).to.equal(999)
+        expect(subLastBefore.length).to.equal(1)
+        expect(subLastBefore[0]).to.equal(666)
+
+        expect(subAll.length).to.equal(2)
+        expect(subAll[0]).to.equal(777)
+        expect(subAll[1]).to.equal(666)
+        expect(subFirst.length).to.equal(0)
+        expect(subLast.length).to.equal(1)
+
+        done()
+      }, 300)
+    })
   })
 })

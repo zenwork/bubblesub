@@ -69,11 +69,22 @@ export class Publication<T> {
   private subscriptions = new Array<Update<T>>()
   private firstSubscriptions = new Array<Update<T>>()
   private lastSubscriptions = new Array<Update<T>>()
+  private lastValue: T
   private publishedValues: T[] = new Array<T>()
   private closed = false
+  private readonly maxSize: number
+  private firstUpdateOccured: boolean = true
+  private count = 0
 
-  constructor(name: string, value: T = null) {
+  /**
+   * Constructor
+   * @param name - publication name
+   * @param value - initial value
+   * @param maxSize - maximum size of publication history. A value < 0  is considered as infinite
+   */
+  constructor(name: string, value: T = null, maxSize: number = -1) {
     this.name = name
+    this.maxSize = maxSize
     if (value !== null) { this.publishedValues.push(value)}
   }
 
@@ -103,15 +114,26 @@ export class Publication<T> {
 
   close() {
     this.closed = true
-    this.lastSubscriptions.forEach((sub) => sub(this.last))
+    if (this.lastValue) {
+      this.lastSubscriptions.forEach((sub) => sub(this.lastValue))
+    }
   }
 
   update(value: T) {
-    if (this.length === 0) {
-      this.firstSubscriptions.forEach((updateFunction) => updateFunction(value))
+    if (!this.closed) {
+
+      if (this.firstUpdateOccured) {
+        this.firstUpdateOccured = false
+        this.firstSubscriptions.forEach((updateFunction) => updateFunction(value))
+      }
+
+      this.publishedValues.push(value)
+      this.lastValue = value
+      this.count++
+      this.subscriptions.forEach((updateFunction) => updateFunction(value))
+
+      if (this.maxSize > -1 && this.length > this.maxSize) this.publishedValues.shift()
     }
-    this.publishedValues.push(value)
-    this.subscriptions.forEach((updateFunction) => updateFunction(value))
   }
 
   subscribe(fn: Update<T>) {
@@ -122,15 +144,19 @@ export class Publication<T> {
   }
 
   subscribeForFirst(fn: Update<T>) {
-    this.firstSubscriptions.push(fn)
-    if (this.first) {
-      setTimeout(() => {fn(this.first)}, 0)
+    if (this.maxSize === -1 || this.count <= this.maxSize) {
+      this.firstSubscriptions.push(fn)
+      if (this.first) {
+        setTimeout(() => {fn(this.first)}, 0)
+      }
+    } else  {
+      console.warn('subscribing for first is to late')
     }
   }
 
   subscribeForLast(fn: Update<T>) {
     this.lastSubscriptions.push(fn)
-    if (this.closed) {
+    if (this.closed && this.maxSize !== 0) {
       setTimeout(() => {fn(this.last)}, 0)
     }
   }
