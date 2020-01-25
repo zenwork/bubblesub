@@ -1,9 +1,6 @@
 // random integer generator
-import { pub } from '../../decorators.js'
 import { Publication } from '../../publication'
 import { publish } from '../../publish.js'
-import { subscribe } from '../../subscribe'
-import doc = Mocha.reporters.doc
 
 function getRandomInt(x: number, y: number) {
   return Math.floor(Math.random() * ((y - x) + 1) + x)
@@ -16,9 +13,9 @@ export class PriceSource {
   counter: number = 0
   publication: Publication<{ name: string, price: number }>
 
-  constructor(prices?: Array<{ price: number; name: string } | { price: number; name: string }>,
+  constructor(prices?: Array<{ price: number; name: string }>,
               interval?: number) {
-    this.publication = publish(document.body).create<{ price: number; name: string }>('prices')
+    this.publication = publish(document.body).create<{ price: number; name: string }>('prices', null, 3)
 
     if (!prices) {
       this.updatePrice('apples', interval)

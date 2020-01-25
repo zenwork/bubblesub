@@ -159,6 +159,10 @@ export class Publication<T> {
     if (this.closed && this.maxSize !== 0) {
       setTimeout(() => {fn(this.last)}, 0)
     }
+
+    if (this.closed && this.maxSize === 0) {
+      console.warn('subscribing for last is to late')
+    }
   }
 
   printAll() {
