@@ -1,3 +1,4 @@
+import { handlers } from '../../publish.js'
 import { initLit, Query } from '../test-util.js'
 import { PriceSource } from './PriceSource.js'
 import { Ticker } from './Ticker.js'
@@ -16,6 +17,7 @@ describe('streaming', function() {
     let apples: Query
 
     beforeEach(async function() {
+      handlers.clear()
       wc = await initLit('ex-ticker', '#container')
       await wc.updateComplete
       first = new Query(wc, '#first')

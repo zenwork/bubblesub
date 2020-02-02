@@ -1,7 +1,7 @@
 import { PUB_REQUEST_EVENT_NAME } from './index.js'
 import { Publication, PublicationRequest } from './publication.js'
 
-const handlers: Map<HTMLElement | ShadowRoot, Map<string, HandlerBuilder<any>>> = new Map()
+export const handlers: Map<HTMLElement | ShadowRoot, Map<string, HandlerBuilder<any>>> = new Map()
 
 /**
  * Create a publication
