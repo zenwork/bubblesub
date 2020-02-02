@@ -1,4 +1,5 @@
 import { customElement, html, LitElement, property } from 'lit-element'
+import { publish } from '../../publish.js'
 import { subscribe } from '../../subscribe.js'
 import { SequenceService } from './index.js'
 
@@ -24,8 +25,17 @@ export class CounterView extends LitElement {
             <h2>Next Fibonacci: <span id="value">${this.counter}</span></h2>`
   }
 
-  private increment() {
+  private async increment() {
     this.counter = this.service.next()
+
+    // the below code is unnecessary. It is there to test the re-publication service
+    publish(document.body).create<SequenceService>('service.counter')
+
+    // this new subscription would return null if the above publish created a new listener
+    this.service = await subscribe(this)
+      .to<SequenceService>('service.counter')
+      .toPromise()
+
   }
 
 }
