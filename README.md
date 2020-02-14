@@ -1,6 +1,6 @@
 # Bubble Sub
 
-Bubblesub addresses javascript state management requirements when the consumers and the providers of state can't easily be bound through the usual inversion of control patterns. This can be because you are making a library and you want to allow the consuming of state without transipilation/bundling time linking.  Or, because you want the loose coupling in your code. 
+Bubblesub provides state management with looser coupling than libraries like haunted or MobX but more convenience than using raw DOM events. This can be because you are making a library of web components and you want to allow the consuming of state without linking at transipilation/bundling. Or, just because you want looser coupling or smaller implementation surface between loosely coupled components.
 
 ## Usage
 
