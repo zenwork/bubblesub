@@ -1,6 +1,6 @@
 # Bubble Sub
 
-Bubblesub addresses javascript state management requirements when the consumer of the state and the provider of the state can't easily be bound to the through dependency injection. This can be because you are making a library of loosely coupled components or because you do not want to bind all your code into a single bundling/transpiling step. 
+Bubblesub addresses javascript state management requirements when the consumers and the providers of state can't easily be bound through the usual inversion of control patterns. This can be because you are making a library of loosely coupled components or because you do not want to bind all your code at bundling/transpilling time. 
 
 ## Usage
 
@@ -12,15 +12,17 @@ npm install bubblesub
 
 ### Publishing Data Streams
 
-Initialize and publish prices somewhere in your app. Bind the publication to an element that is a parent all the consuming components. You can bind to `document.body` for simplicity, but doing so essentially makes all your publications global. 
+Streaming data can be used when a lot of data will arrive asynchronously to a component. It can also be used to track the changes happening to a single state.
+
+Initialize the your publication. You can bind it to `document.body` for simplicity, but doing so essentially makes all your publications global. 
 
 #### publishing
 ```typescript
-import { Publication, publish } from 'bubblesub' 
+import { Publication, stream } from 'bubblesub' 
 
 interface Price { name: string, price: number }
  
-const pub: Publication<Price> = publish(parentElement).create<Price>('prices')
+const pub: Publication<Price> = stream<Price>('prices', parentElement)
 
 pub.update({name: 'goog', price: 1273.74})
 pub.update({name: 'fb', price: 193.62})
@@ -36,10 +38,9 @@ pub.close()
 In an element that is a child of the `parentElement` subscribe for prices
 
 ```typescript     
-import { subscribe } from 'bubblesub'
+import { consume } from 'bubblesub'
 
-subscribe(myChildElement)
-    .to<Price>('prices')
+consume<Price>('prices', myChildElement)
     .map(price => console.log(price.name + ':' + price.price )) 
 
 ```
@@ -51,7 +52,6 @@ If the code that publishes the prices exports the `Price` typescript interface t
 
 Sometimes you want to publish some shared behaviour, logic, or a service. You can then share any api.
 
-This is a new convenience api around the base API. It simplifies using the base api and makes the intent clearer.
 
 #### publishing
 ```typescript
@@ -91,7 +91,10 @@ subscribe(element).to<T>(name).mapFirst((i:T) => void)
 subscribe(element).to<T>(name).mapFirst((i:T) => void).toPromise()
 
 subscribe(element).to<T>(name).mapLast((i:T) => void)
-subscribe(element).to<T>(name).mapLast((i:T) => void).toPromise()   
+subscribe(element).to<T>(name).mapLast((i:T) => void).toPromise()  
+
+//debugging
+bubblesub.debug() 
 ```
 
 The new API is an attempt to clarify how to use bubblesub for common cases
@@ -111,9 +114,6 @@ let p:Publication<T> = stream<T>(name, element, historyBuffer)
 consume<T>(name, element).map((i:T) => void)
 consume<T>(name, element).mapFirst((i:T) => void)
 consume<T>(name, element).mapLast((i:T) => void)
-               
-//debugging
-bubblesub.debug()
 
 ```
 
