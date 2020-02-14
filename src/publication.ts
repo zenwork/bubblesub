@@ -1,4 +1,4 @@
-import { Update } from './subscribe'
+import { Update } from './subscribe.js'
 
 /**
  * Request for publication to subscribe to
@@ -165,8 +165,14 @@ export class Publication<T> {
     }
   }
 
-  printAll() {
-    this.publishedValues.forEach((p: T, i: number) => {console.log(`${i}: ${JSON.stringify(p)}`)})
-    console.log()
+  asDebugMap(): {} {
+    return {
+      name: this.name,
+      length: this.length,
+      sub: this.subscriptions.length,
+      fistSub: this.firstSubscriptions.length,
+      lastSub: this.lastSubscriptions.length,
+      lastValue: this.last.constructor.name + ':' + JSON.stringify(this.last)
+    }
   }
 }

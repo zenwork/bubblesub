@@ -1,5 +1,5 @@
 import { customElement, html, LitElement, property } from 'lit-element'
-import { subscribe } from '../../subscribe.js'
+import { consume } from '../../api.js'
 
 interface Tick {
   name: string,
@@ -30,9 +30,8 @@ export class Ticker extends LitElement {
     this.applePrices = new Array<number>()
     this.counter = 0
 
-    subscribe(this)
-      .to<Tick>('prices')
-      .map((tick: Tick) => {
+    consume<Tick>('prices', this)
+      .map((tick) => {
         this.counter++
         if (this.prices.filter((t: Tick) => t.name === tick.name).length === 1) {
           this.prices

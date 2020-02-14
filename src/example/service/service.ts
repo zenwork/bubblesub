@@ -11,7 +11,7 @@ export interface Service {
 
   subscribe(callback: Selection): void
 
-  add(todo: Todo): void
+  add(todo: Todo): Service
 
   get(id: number): Todo
 
@@ -27,9 +27,10 @@ export class TodoService implements Service {
   todos: Map<number, Todo> = new Map<number, Todo>()
   callabacks: Selection[] = []
 
-  add(todo: Todo) {
+  add(todo: Todo): TodoService {
     this.todos.set(this.todoIndex, todo)
     this.todoIndex++
+    return this
   }
 
   get(id: number): Todo {

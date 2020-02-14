@@ -34,7 +34,7 @@ export type Update<T> = (updated: T | null) => void
 /**
  * Wrapper around subscription interface
  */
-class To<T> {
+export class To<T> {
   name: string
   target: HTMLElement | ShadowRoot
 

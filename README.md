@@ -1,55 +1,163 @@
 # Bubble Sub
 
-***NOTE: This library is experimental!***
+Bubblesub provides state management with looser coupling than libraries like haunted or MobX but more convenience than using raw DOM events. This can be because you are making a library of web components and you want to allow the consuming of state without linking at transipilation/bundling. Or, just because you want looser coupling or smaller implementation surface between loosely coupled components.
 
-Bubblesub is a simple and lightweight library to manage observables. It builds on top of the DOM and event web standards. It's reduces the code needed without introducing a large library. It targets mid-range problems such as:
-* building web components libraries
-* micro frontends
-* create observable contexts that are neither bound to a whole app or to a whole page.
+## Usage
 
-Bubblesub is flexible enough to accomplish different types of integrations:
-* share a singleton services or factory
-* share data
-* stream data from a websocket or SSE to multiple listening components
+```shell script
 
-Bubblesub is written in Typescript but useable as a JS or TS dependency. It is published using ES 6 modules
-
-Bubblesub is inspired by a conference talk given by Justin Fagnani (@justinfugnani) who works on Polymer's lit-element and lit-html: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
-
-## It's Easy
-
-There are some examples in this repo that are implemented as standalone Web Components. Finde them [here](src/example).
-
-## How it works
-
-* Bubbles sub use events to 'search' up the DOM for nodes that provide what you are lokking for.
-* When found, it registers a callback on any change that happens to that thing
-* publishing and subscribing can be accomplished through typescript decorators (`@pub`, `@sub`) or through plain JS api.
-* Bubblesub is written in Typescript and is provided with ES module bundling and d.ts files
-* Bubblesub has zero dependencies and targets web component (ie: custom elements, shadow dom) development.
-
-### Publishing a Stream of updates
-
-Do the following to publish a stream of data or update a single value as it changes
-
-#### publishing
-```typescript
-import { Publication } from './publication' 
-import { publish } from './publish'
-
-interface Price { name: string, price: number }
- 
-const pub: Publication<Price> = publish(document.body).create<Price>('prices')
-pub.update({name: 'goog', price: 1273.74})
-pub.update({name: 'fb', price: 193.62})
-
-pub.close()
+npm install bubblesub
 
 ```
 
-#### publishing initial value
+### Publishing Data Streams
 
-If the publication has an initial value you can provide it in the create function.
+Streaming data can be used when a lot of data will arrive asynchronously to a component. It can also be used to track the changes happening to a single state.
+
+Initialize the your publication. You can bind it to `document.body` for simplicity, but doing so essentially makes all your publications global. 
+
+#### publishing
+```typescript
+import { Publication, stream } from 'bubblesub' 
+
+interface Price { name: string, price: number }
+ 
+const pub: Publication<Price> = stream<Price>('prices', parentElement)
+
+pub.update({name: 'goog', price: 1273.74})
+pub.update({name: 'fb', price: 193.62})
+                          
+// ...
+
+pub.close()
+
+```      
+
+#### subscribing
+
+In an element that is a child of the `parentElement` subscribe for prices
+
+```typescript     
+import { consume } from 'bubblesub'
+
+consume<Price>('prices', myChildElement)
+    .map(price => console.log(price.name + ':' + price.price )) 
+
+```
+
+If the code that publishes the prices exports the `Price` typescript interface then the consumer can benefit from the type support.
+
+### Publishing Behaviour
+**\[NEW UNSTABLE API]** 
+
+Sometimes you want to publish some shared behaviour, logic, or a service. You can then share any api.
+
+
+#### publishing
+```typescript
+import { declare } from 'bubblesub' 
+ 
+await declare('prices-calc', new PriceService(), document.body)
+
+```
+
+#### subscribing
+```typescript
+import { use } from 'bubblesub' 
+ 
+let service:PriceService = await use<PriceService>('prices-calc', document.body)
+
+let price:number = service.calcPrice('goog')
+
+```
+
+## API
+
+```typescript   
+
+//Publishing
+let p:Publication<T> = publish(parent).create<T>(name)
+let p:Publication<T> = publish(parent).create<T>(name, initialValue)
+let p:Publication<T> = publish(parent).create<T>(name, initialValue, historySize?)
+  
+p.name  
+p.update(newValue)
+p.close()
+            
+//Subscribing
+subscribe(element).to<T>(name).map((i:T) => void)
+
+subscribe(element).to<T>(name).mapFirst((i:T) => void)
+subscribe(element).to<T>(name).mapFirst((i:T) => void).toPromise()
+
+subscribe(element).to<T>(name).mapLast((i:T) => void)
+subscribe(element).to<T>(name).mapLast((i:T) => void).toPromise()  
+
+//debugging
+bubblesub.debug() 
+```
+
+The new API is an attempt to clarify how to use bubblesub for common cases
+
+```typescript  
+//New behavior/service api
+declare(name, behaviour) //declared on document.body
+declare(name, behaviour, element)
+
+use<T>(name, element) 
+
+//New streaming api
+let p:Publication<T> = stream<T>(name) //streaming from document.body
+let p:Publication<T> = stream<T>(name, element)
+let p:Publication<T> = stream<T>(name, element, historyBuffer)
+           
+consume<T>(name, element).map((i:T) => void)
+consume<T>(name, element).mapFirst((i:T) => void)
+consume<T>(name, element).mapLast((i:T) => void)
+
+```
+
+## Bubblesub Details
+
+Bubblesub is a simple and lightweight library to share data and behaviour in the browser. You can scope based on your design: share within a closed scope of a few components or share globally; share context without having to bind everything at bundling/transpiling time.
+
+Bubblesub use the DOM and DOM events as a way to declare and find shared data and behaviour. It targets problem spaces such as:
+* building web components libraries
+* micro frontends
+* creating observable contexts that are neither bound to a whole app or to a whole page.
+
+Bubblesub is flexible with a simple api. The publisher and subscriber can operate asynchronously. 
+
+publish:
+* singleton services and factories
+* asynch data requests and results
+* a closable data stream
+
+subscribe for:
+* a single service or factory 
+* all updates in a publication
+* the first update only
+* the last update only
+
+
+Bubblesub is written in Typescript but is useable as a JS or TS dependency. It is published using ES 6 modules
+
+Bubblesub is inspired by a conference talk given by Justin Fagnani (@justinfugnani) who works on Polymer's lit-element and lit-html: [Polymer - Dependency Injection](https://youtu.be/6o5zaKHedTE)
+
+## How it works
+
+* Bubblesub uses events to 'search' up the DOM tree for nodes that provide what you are looking for.
+* When found, it registers a callback on any change that happens to that publication
+* Bubblesub is written in Typescript and is provided with ES module bundling and d.ts files
+* Bubblesub has zero dependencies.
+
+There are some examples in this repo that are implemented as standalone Web Components. Finde them [here](src/example).
+
+## More Examples
+
+### publishing initial value
+
+If the publication has a symantically important initial value you can provide it in the create function.
 
 ```typescript
 import { Publication } from './publication' 
@@ -61,7 +169,7 @@ const pub: Publication<Price> = publish(document.body).create<Price>('prices',{n
 
 ```
 
-#### publication history
+### publication history
 
 If it is not important for a late-subscriber to get all of the updates ever made to a publication then you can set the size of the update history. Setting it to zero means no history.
 
@@ -78,7 +186,7 @@ const pub: Publication<Price> = publish(document.body).create<Price>('prices',nu
 In the above case no history is maintained. So a late-subscriber interested in the first update will never receive anything. In that case a warning is logged to indicate that subscribing is to late. A late-subscriber interested in the last update will also receive nothing if `Publication.close()` has been called.
 
 
-#### subscribing
+### subscribing
 
 You can subscribe for all updates, just the first, or just the last. The last update is only published if the publication is closed.
 ```typescript
@@ -94,40 +202,32 @@ subscribe(this)
 
 ```
 
-### Publishing a service
+#### debugging
 
-Publishing a service or a factory is very similar to a stream of values. It's simply not expected that a service or factory is updated more than once.
+To take a peak at the publication currently published use the following command in the browser console.
 
-#### publishing
+```javascript
 
-To publish a shared service or factory do the same as with a stream.
-
-```typescript
-import {ServiceImpl, ServiceInterface } from 'my-app' 
-import { publish } from 'bubblesub' 
-
-const pub = publish(document.body).create<ServiceInterface>('service')
-pub.update(new ServiceImpl())
+bubblesub.debug()
 
 ```
 
-#### subscribing
+## Usage Examples/Demo
 
-To subscribe to a service or factory use async/await with the `.toPromise()` function to resolve the first update. Or you can use the `.mapFirst()` to process the update in a callback.
+A set of examples devised for demonstrating and testing is available if you checkout the project and build it. For the sake of clarity the examples are implemented using vanilla JS web components.
 
-```typescript
-import { subscribe } from 'bubblesub' 
-import { ServiceInterface } from 'my-app' 
+```shell script
+## build the library, the tests, and the examples
+npm run build:serve
 
-const service:ServiceInterface = await subscribe(this)
-      .to<ServiceInterface>('service')
-      .toPromise()
+## serve the built examples
+npm run serve
 
-subscribe(this)
-      .to<ServiceInterface>('service')
-      .mapFirst((service:ServiceInterface)=>{/* do something with the service*/})
-      
+## open browser at http://localhost:8888/assets/index.html
 ```
+
+[Docs on Examples](src/example/README.md)
+
 
 ## Leveraging the DOM and events
 
@@ -139,28 +239,4 @@ So...
 * Bubblesub relies on the hierarchical nature of the DOM to bind publisher and subscriber. A subscriber is bound to the closest ancestor that publishes the wanted Publication.
 * There is no central registry of Publications. This means that your Bubblesub bindings can be encapsulated within a parent component, leak nothing, require nothing from outside.
 * bubblesub does not require that subscribing happen after an observable is published. The subcriber will keep on trying to find the observable assuming it will eventually appear. On the other hand a late subscriber will receive all the updates that the observable has accumulated before the subscription was established.
-
-## Decorators
-
-see: [experimental decorators](DECORATORS.md)
-
-## Usage
-
-The only required coupling is on the name of the dependency. Bubblesub is implemented in Typescript. So we have the support of typing to make it easier to manage the decoupled implementation.
-
-### Run Examples
-
-A set of examples devised for demonstrating and testing is available if you checkout the project and build it. For the sake of clarity the examples are implemented using vanilla JS web components.
-
-```shell script
-## build the library, the tests, and the examples
-yarn build:serve
-
-## serve the built examples
-yarn serve
-
-## open browser at http://localhost:8888
-```
-
-[Docs on Examples](src/example/README.md)
 

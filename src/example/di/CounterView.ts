@@ -1,4 +1,5 @@
 import { customElement, html, LitElement, property } from 'lit-element'
+import { use } from '../../api.js'
 import { publish } from '../../publish.js'
 import { subscribe } from '../../subscribe.js'
 import { SequenceService } from './index.js'
@@ -14,9 +15,7 @@ export class CounterView extends LitElement {
 
   async connectedCallback() {
     super.connectedCallback()
-    this.service = await subscribe(this)
-      .to<SequenceService>('service.counter')
-      .toPromise()
+    this.service = await  use('service.counter', this)
   }
 
   protected render() {
