@@ -2,6 +2,7 @@ import { publish } from './publish'
 export { publish } from './publish.js'
 export { subscribe } from './subscribe.js'
 export * from './decorators'
+export * from './api.js'
 export { PublicationRequest } from './publication.js'
 export { Publication } from './publication.js'
 

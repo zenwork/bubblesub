@@ -41,7 +41,7 @@ export function publish(parent: HTMLElement | ShadowRoot) {
   }
 }
 
-class HandlerBuilder<T> {
+export class HandlerBuilder<T> {
   readonly publication: Publication<T>
 
   constructor(publication: Publication<T>) {

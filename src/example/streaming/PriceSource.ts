@@ -1,21 +1,24 @@
 // random integer generator
+import { stream } from '../../api.js'
 import { Publication } from '../../publication'
-import { publish } from '../../publish.js'
 
 function getRandomInt(x: number, y: number) {
   return Math.floor(Math.random() * ((y - x) + 1) + x)
 }
 
-// Start price streams
+interface Price { name: string, price: number }
+
+/**
+ * This is a moke price source. It generates random prices for five different fruits.
+ */
 export class PriceSource {
 
   closed: boolean = false
   counter: number = 0
-  publication: Publication<{ name: string, price: number }>
+  publication: Publication<Price>
 
-  constructor(prices?: Array<{ price: number; name: string }>,
-              interval?: number) {
-    this.publication = publish(document.body).create<{ price: number; name: string }>('prices', null, 3)
+  constructor(prices?: Price[], interval?: number) {
+    this.publication = stream<Price>('prices')
 
     if (!prices) {
       this.updatePrice('apples', interval)

@@ -1,4 +1,4 @@
-import { publish } from '../../publish.js'
+import { declare } from '../../api.js'
 export { CounterView } from './CounterView.js'
 
 export interface SequenceService {
@@ -33,5 +33,4 @@ function* fib() {
   }
 }
 
-const pub = publish(document.body).create<SequenceService>('service.counter')
-pub.update(new CounterService())
+const pub = declare('service.counter', new CounterService())
