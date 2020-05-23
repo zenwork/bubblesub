@@ -1,7 +1,10 @@
 name: Node CI
 
-on: [push]
-
+on:
+  push:
+    branches-ignore:
+      - master
+q
 jobs:
   build:
 
