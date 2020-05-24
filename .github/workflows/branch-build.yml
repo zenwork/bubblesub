@@ -3,6 +3,8 @@ name: Build & Test
 on:
   push:
     branches-ignore:
+      - alpha
+      - beta
       - master
 
 jobs:
