@@ -1,15 +1,3 @@
-import { publish } from '../../publish.js'
-import { service } from './FileService.js'
-export { ProgressDialog } from './ProgressDialog.js'
-export { ProgressBar } from './ProgressBar.js'
-
-export class FileServiceComponent extends HTMLElement {
-
-  constructor() {
-    super()
-    publish(document.body).create('file-service', service)
-
-  }
-}
-
-customElements.define('ex-files', FileServiceComponent)
+export { FileServiceWC } from './web-component-file-service'
+export { ProgressDialog } from './web-component-progress-dialog.js'
+export { ProgressBar } from './web-component-progress-bar.js'

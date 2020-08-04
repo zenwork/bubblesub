@@ -6,13 +6,15 @@
 </head>
 <body>
 
-    <ex-files></ex-files>
-    <progress-dialog style="display:block;border: cadetblue solid 1px;padding: 1rem">
-        <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
-        <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
-        <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
-        <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
-    </progress-dialog>
+    <app-shell>
+        <file-service></file-service>
+        <progress-dialog style="display:block;border: cadetblue solid 1px;padding: 1rem">
+            <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
+            <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
+            <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
+            <progress-bar style="display:block;border: cadetblue solid 1px; padding: 1rem"></progress-bar>
+        </progress-dialog>
+    </app-shell>
 
     <script type="module" src="../dist-src/example/progress/index.js"></script>
 

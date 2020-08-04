@@ -1,7 +1,7 @@
 import { Publication } from '../../publication'
 import { publish } from '../../publish.js'
 import { subscribe } from '../../subscribe.js'
-import { FileService } from './FileService.js'
+import { FileService } from './web-component-file-service.js'
 
 export class ProgressDialog extends HTMLElement {
 

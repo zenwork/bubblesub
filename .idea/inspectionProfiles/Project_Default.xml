@@ -14,7 +14,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="16">
+          <list size="19">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -31,6 +31,9 @@
             <item index="13" class="java.lang.String" itemvalue="todo-status" />
             <item index="14" class="java.lang.String" itemvalue="ex-service" />
             <item index="15" class="java.lang.String" itemvalue="ex-counter" />
+            <item index="16" class="java.lang.String" itemvalue="app-shell" />
+            <item index="17" class="java.lang.String" itemvalue="ex-files" />
+            <item index="18" class="java.lang.String" itemvalue="file-service" />
           </list>
         </value>
       </option>
@@ -38,8 +41,5 @@
     </inspection_tool>
     <inspection_tool class="TsLint" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TypeScriptPreferShortImport" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="UnterminatedStatementJS" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="ignoreSemicolonAtEndOfBlock" value="true" />
-    </inspection_tool>
   </profile>
 </component>
