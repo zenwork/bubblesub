@@ -24,6 +24,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
       run: |
+        cd old-setup
         npm set audit false
         npm install
         node_modules/.bin/pika build

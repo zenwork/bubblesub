@@ -19,10 +19,12 @@ jobs:
           node-version: 14
       - name: install dependencies
         run: |
+          cd old-setup
           npm set audit false
           npm ci
       - name: build, and test
         run: |
+          cd old-setup
           node_modules/.bin/pika build
       - name: release
         env:
