@@ -1,13 +1,10 @@
 import { Publication, PublicationRequest } from './publication.js'
 
 describe('subscriber', function() {
-  this.enableTimeouts()
-  const expect = chai.expect
-
   describe('Sub', function() {
 
     it('should register subscriptions', function() {
-      let subAll: number
+      let subAll: number = 0
       const request = new PublicationRequest<number>('test')
       request.pub = new Publication<number>('test', null)
       request.subscribe((up: number) => {subAll = up})
@@ -18,9 +15,9 @@ describe('subscriber', function() {
     })
 
     it('should register early subscriptions', function() {
-      let subAll: number
-      let subFirst: number
-      let subLast: number
+      let subAll: number = 0
+      let subFirst: number = 0
+      let subLast: number = 0
       const request = new PublicationRequest<number>('test')
       request.subscribe((up: number) => {subAll = up})
       request.subscribeForFirst((up: number) => {subFirst = up})

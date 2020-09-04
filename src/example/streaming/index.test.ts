@@ -5,9 +5,6 @@ import { Ticker } from './Ticker.js'
 export { Ticker } from './Ticker.js'
 
 describe('streaming', function() {
-  // @ts-ignore
-  this.timeout(5000)
-  this.enableTimeouts()
 
   describe('wc', function() {
     let service: PriceSource
@@ -50,7 +47,7 @@ describe('streaming', function() {
 
     })
 
-    it('2- should not miss last when subscribing to last', function(done) {
+    it('3- should not miss last when subscribing to last', function(done) {
       service = new PriceSource([
         {name: 'apples', price: 999},
         {name: 'apples', price: 888},

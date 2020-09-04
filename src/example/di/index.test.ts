@@ -25,25 +25,25 @@ describe('fibonacci counter(di) example', () => {
       value = new Query(wc, 'span')
       button = new Query(wc, '#button')
       wrapper = {
-          wc,
-          value: async () => {
-            await value.query()
-          },
-          button: async () => {
-            await button.query().click()
-            await wc.updateComplete
+        wc,
+        value: async () => {
+          await value.query()
+        },
+        button: async () => {
+          await button.query().click()
+          await wc.updateComplete
 
-          },
-          await: async () => {
-            return await wc.updateComplete
-          }
+        },
+        await: async () => {
+          return await wc.updateComplete
         }
+      }
       return wc.updateComplete
     })
 
-    setTimeout(() => {
+    it('should show next number when button pressed', function(done) {
+      setTimeout(async () => {
 
-      it('should show next number when button pressed', async function() {
         await this.timeout(1000)
         await wrapper.await()
         chai.expect(value.query().textContent).to.equal('0')
@@ -62,8 +62,10 @@ describe('fibonacci counter(di) example', () => {
         await wrapper.button()
         await wrapper.button()
         chai.expect(value.query().textContent).to.equal('89')
-      })
-    }, 500)
+
+        done()
+      }, 500)
+    })
 
   })
 })

@@ -1,7 +1,7 @@
 import { Publication } from './publication.js'
 
 describe('publisher', function() {
-  this.enableTimeouts()
+
   const expect = chai.expect
 
   describe('Publication', function() {
@@ -50,9 +50,9 @@ describe('publisher', function() {
     })
 
     it('should trigger early subscriptions', function() {
-      let subAll: number
-      let subFirst: number
-      let subLast: number
+      let subAll: number = 0
+      let subFirst: number = 0
+      let subLast: number = null
 
       const pub = new Publication<number>('test')
 
@@ -63,7 +63,7 @@ describe('publisher', function() {
       pub.update(999)
       pub.update(888)
       expect(subAll).to.equal(888)
-      expect(subLast).to.equal(undefined)
+      expect(subLast).to.equal(null)
       pub.update(777)
 
       pub.close()
@@ -74,9 +74,9 @@ describe('publisher', function() {
     })
 
     it('should trigger late subscriptions', function(done) {
-      let subAll: number
-      let subFirst: number
-      let subLast: number
+      let subAll: number = 0
+      let subFirst: number = 0
+      let subLast: number = 0
 
       const pub = new Publication<number>('test')
 
@@ -98,13 +98,13 @@ describe('publisher', function() {
     })
 
     it('should not remember past updates when configured to do so', function(done) {
-      const subAllBefore: number[] = new Array<number>()
-      const subFirstBefore: number[] = new Array<number>()
-      const subLastBefore: number[] = new Array<number>()
+      const subAllBefore: number[] = []
+      const subFirstBefore: number[] = []
+      const subLastBefore: number[] = []
 
-      const subAll: number[] = new Array<number>()
-      const subFirst: number[] = new Array<number>()
-      const subLast: number[] = new Array<number>()
+      const subAll: number[] = []
+      const subFirst: number[] = []
+      const subLast: number[] = []
 
       const pub = new Publication<number>('test', null, 0)
       pub.subscribe((update: number) => {subAllBefore.push(update)})
@@ -122,6 +122,7 @@ describe('publisher', function() {
 
       setTimeout(() => {
         expect(subAll.length).to.eq(0)
+        expect(subAllBefore.length).to.eq(3)
         expect(subFirstBefore.length).to.eq(1)
         expect(subFirstBefore[0]).to.eq(999)
         expect(subFirst.length).to.eq(0)

@@ -60,11 +60,12 @@ export class PublicationRequest<T> {
   }
 }
 
+let id: number = 0
 /**
  * A published value
  */
 export class Publication<T> {
-
+  readonly id: number = ++id
   readonly name: string
   private subscriptions = new Array<Update<T>>()
   private firstSubscriptions = new Array<Update<T>>()
@@ -167,12 +168,14 @@ export class Publication<T> {
 
   asDebugMap(): {} {
     return {
+      id: this.id,
       name: this.name,
       length: this.length,
-      sub: this.subscriptions.length,
-      fistSub: this.firstSubscriptions.length,
-      lastSub: this.lastSubscriptions.length,
-      lastValue: this.last.constructor.name + ':' + JSON.stringify(this.last)
+      subscribedForAll: this.subscriptions.length,
+      subscribedForFirst: this.firstSubscriptions.length,
+      subscribedForLast: this.lastSubscriptions.length,
+      type: this.last ? this.last.constructor.name : null,
+      values: this.publishedValues
     }
   }
 }
