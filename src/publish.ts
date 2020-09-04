@@ -19,13 +19,19 @@ export function publish(parent: HTMLElement | ShadowRoot) {
     create: function createPublication<T>(name: string,
                                           initialValue?: T | null | undefined,
                                           maxSize: number = -1): Publication<T> {
+      let tag = 'unknown'
+      if (parent instanceof HTMLElement) tag = parent.tagName
+      if (parent instanceof ShadowRoot) tag = parent.host.tagName + ' (shadow-dom)'
 
       if (handlers.get(parent) && handlers.get(parent).get(name)) {
         // listener exists so just return stored publication
-        return handlers.get(parent).get(name).publication
+        const pub = handlers.get(parent).get(name).publication
+        // @ts-ignore
+        console.debug(`return existing publication[${pub.id}] for ${name}@${tag}`)
+        return pub
 
       } else {
-
+        console.debug(`create publication for ${name}@${tag}`)
         // create new publication and listener
         const publication = new Publication<T>(name, initialValue, maxSize)
         const builder = new HandlerBuilder(publication)

@@ -6,6 +6,7 @@ import { FileService } from './FileService.js'
 export class ProgressDialog extends HTMLElement {
 
   pub: Publication<number> = null
+  pub2: Publication<number> = null
   root: ShadowRoot
 
   constructor() {
